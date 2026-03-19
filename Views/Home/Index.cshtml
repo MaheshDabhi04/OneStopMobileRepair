@@ -1,0 +1,315 @@
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Dashboard";
+    ViewData["PageTitle"] = "Dashboard";
+
+    int total     = ViewBag.Total     ?? 0;
+    int pending   = ViewBag.Pending   ?? 0;
+    int repairing = ViewBag.UnRepairable ?? 0;
+    int completed = ViewBag.Completed ?? 0;
+    int delivered = ViewBag.Delivered ?? 0;
+    int today     = ViewBag.DeliveryToday ?? 0;
+    int overdue   = ViewBag.Overdue   ?? 0;
+
+    double pendPct   = total > 0 ? Math.Round((double)pending   / total * 100, 1) : 0;
+    double repPct    = total > 0 ? Math.Round((double)repairing / total * 100, 1) : 0;
+    double compPct   = total > 0 ? Math.Round((double)completed / total * 100, 1) : 0;
+    double delPct    = total > 0 ? Math.Round((double)delivered / total * 100, 1) : 0;
+}
+
+<!-- ═══════════════════════════════════════════════════
+     WELCOME HERO BANNER
+════════════════════════════════════════════════════ -->
+<div class="dash-hero">
+    <div class="dash-hero-left">
+        <div class="dash-greeting" id="greetingText">Good morning,</div>
+        <h1 class="dash-hero-title">Admin Dashboard <span class="dash-badge-live">LIVE</span></h1>
+        <p class="dash-hero-sub">OneStop Mobile Repair · Morbi &nbsp;|&nbsp; Real-time overview of all repair jobs</p>
+    </div>
+    <div class="dash-hero-right">
+        <div class="dash-clock-card">
+            <div class="dash-clock" id="liveClock">--:--:--</div>
+            <div class="dash-date"  id="liveDate">Loading…</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     KPI STAT CARDS  (7 cards)
+════════════════════════════════════════════════════ -->
+<div class="kpi-grid">
+
+    <a href="/Customers/Index" class="kpi-card kpi-total" style="--delay:.05s; text-decoration: none;">
+        <div class="kpi-glow"></div>
+        <div class="kpi-top">
+            <div class="kpi-icon-wrap kpi-icon-total">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+            </div>
+            <div class="kpi-trend kpi-trend-neutral">ALL</div>
+        </div>
+        <div class="kpi-value counter" data-target="@total">0</div>
+        <div class="kpi-label">Total Jobs</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:100%;background:var(--c-total)"></div></div>
+    </a>
+
+    <a href="/Customers/Index?status=Pending" class="kpi-card kpi-pending" style="--delay:.10s; text-decoration: none;">
+        <div class="kpi-glow"></div>
+        <div class="kpi-top">
+            <div class="kpi-icon-wrap kpi-icon-pending">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="kpi-trend kpi-trend-warn">@pendPct%</div>
+        </div>
+        <div class="kpi-value counter" data-target="@pending">0</div>
+        <div class="kpi-label">Pending</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:@pendPct%;background:var(--c-pending)"></div></div>
+    </a>
+
+    <a href="/Customers/Index?status=Unrepairable" class="kpi-card kpi-unrepairable" style="--delay:.15s; text-decoration: none;">
+        <div class="kpi-glow"></div>
+        <div class="kpi-top">
+            <div class="kpi-icon-wrap kpi-icon-unrepairable">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </div>
+            <div class="kpi-trend kpi-trend-danger">@repPct%</div>
+        </div>
+        <div class="kpi-value counter" data-target="@repairing">0</div>
+        <div class="kpi-label">Unrepairable</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:@repPct%;background:var(--c-repairing)"></div></div>
+    </a>
+
+    <a href="/Customers/Index?status=Completed" class="kpi-card kpi-completed" style="--delay:.20s; text-decoration: none;">
+        <div class="kpi-glow"></div>
+        <div class="kpi-top">
+            <div class="kpi-icon-wrap kpi-icon-completed">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="kpi-trend kpi-trend-success">@compPct%</div>
+        </div>
+        <div class="kpi-value counter" data-target="@completed">0</div>
+        <div class="kpi-label">Completed</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:@compPct%;background:var(--c-completed)"></div></div>
+    </a>
+
+    <a href="/Customers/Index?status=Delivered" class="kpi-card kpi-delivered" style="--delay:.25s; text-decoration: none;">
+        <div class="kpi-glow"></div>
+        <div class="kpi-top">
+            <div class="kpi-icon-wrap kpi-icon-delivered">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            </div>
+            <div class="kpi-trend kpi-trend-info">@delPct%</div>
+        </div>
+        <div class="kpi-value counter" data-target="@delivered">0</div>
+        <div class="kpi-label">Delivered</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:@delPct%;background:var(--c-delivered)"></div></div>
+    </a>
+
+    <a href="/Customers/Index?filter=today" class="kpi-card kpi-today" style="--delay:.30s; text-decoration: none;">
+        <div class="kpi-glow"></div>
+        <div class="kpi-top">
+            <div class="kpi-icon-wrap kpi-icon-today">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="kpi-trend kpi-trend-purple">TODAY</div>
+        </div>
+        <div class="kpi-value counter" data-target="@today">0</div>
+        <div class="kpi-label">Delivery Today</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:100%;background:var(--c-today)"></div></div>
+    </a>
+
+    <a href="/Customers/Index?filter=overdue" class="kpi-card kpi-overdue @(overdue > 0 ? "kpi-pulse" : "")" style="--delay:.35s; text-decoration: none;">
+        <div class="kpi-glow"></div>
+        <div class="kpi-top">
+            <div class="kpi-icon-wrap kpi-icon-overdue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="kpi-trend kpi-trend-danger">ALERT</div>
+        </div>
+        <div class="kpi-value counter" data-target="@overdue">0</div>
+        <div class="kpi-label">Overdue</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:100%;background:var(--c-overdue)"></div></div>
+    </a>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     BOTTOM SECTION — Donut + Quick Actions + Tips
+════════════════════════════════════════════════════ -->
+<div class="dash-bottom-grid">
+
+    <!-- Donut Chart -->
+    <div class="dash-panel dash-donut-panel">
+        <div class="dash-panel-header">
+            <div class="dash-panel-title">
+                <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
+                Job Distribution
+            </div>
+        </div>
+        <div class="donut-wrap">
+            <svg class="donut-svg" viewBox="0 0 120 120" id="donutChart">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#1e293b" stroke-width="18"/>
+                @{
+                    double circum = 2 * Math.PI * 50;
+                    // segments: pending, repairing, completed, delivered
+                    var segs = new[] {
+                        new { pct = pendPct, color = "#f59e0b", label = "Pending" },
+                        new { pct = repPct,  color = "#ef4444", label = "Unrepairable" },
+                        new { pct = compPct, color = "#10b981", label = "Completed" },
+                        new { pct = delPct,  color = "#3b82f6", label = "Delivered" },
+                    };
+                    double offset = 0;
+                    foreach (var s in segs) {
+                        double dash = circum * s.pct / 100;
+                        double gap  = circum - dash;
+                        <circle cx="60" cy="60" r="50" fill="none"
+                                stroke="@s.color"
+                                stroke-width="18"
+                                stroke-dasharray="@dash.ToString("F2") @gap.ToString("F2")"
+                                stroke-dashoffset="@(-(offset * circum / 100)).ToString("F2")"
+                                transform="rotate(-90 60 60)"
+                                class="donut-seg"/>
+                        offset += s.pct;
+                    }
+                }
+                <text x="60" y="56" text-anchor="middle" class="donut-center-num">@total</text>
+                <text x="60" y="70" text-anchor="middle" class="donut-center-label">Total</text>
+            </svg>
+        </div>
+        <div class="donut-legend">
+            <div class="leg-item"><span class="leg-dot" style="background:#f59e0b"></span> Pending <b>@pending</b></div>
+            <div class="leg-item"><span class="leg-dot" style="background:#ef4444"></span> Unrepairable <b>@repairing</b></div>
+            <div class="leg-item"><span class="leg-dot" style="background:#10b981"></span> Completed <b>@completed</b></div>
+            <div class="leg-item"><span class="leg-dot" style="background:#3b82f6"></span> Delivered <b>@delivered</b></div>
+        </div>
+    </div>
+
+    <!-- Quick Actions Panel -->
+    <div class="dash-panel dash-actions-panel">
+        <div class="dash-panel-header">
+            <div class="dash-panel-title">
+                <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Quick Actions
+            </div>
+        </div>
+        <div class="qa-grid">
+            <a href="/Customers/Create" class="qa-btn qa-primary">
+                <div class="qa-btn-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </div>
+                <div>
+                    <div class="qa-btn-label">Add New Customer</div>
+                    <div class="qa-btn-sub">Register a new repair job</div>
+                </div>
+            </a>
+            <a href="/Customers/Index" class="qa-btn qa-success">
+                <div class="qa-btn-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div>
+                    <div class="qa-btn-label">View All Customers</div>
+                    <div class="qa-btn-sub">Browse & manage records</div>
+                </div>
+            </a>
+            <a href="/Customers/Reminder" class="qa-btn qa-warning">
+                <div class="qa-btn-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                </div>
+                <div>
+                    <div class="qa-btn-label">Delivery Reminders</div>
+                    <div class="qa-btn-sub">Check due & overdue jobs</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Alert Banner if overdue > 0 -->
+        @if (overdue > 0) {
+        <div class="dash-alert-banner">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span><strong>@overdue job@(overdue > 1 ? "s" : "")</strong> overdue! Please check delivery reminders immediately.</span>
+            <a href="/Customers/Reminder" class="dash-alert-link">View →</a>
+        </div>
+        }
+
+        @if (today > 0) {
+        <div class="dash-info-banner">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span><strong>@today job@(today > 1 ? "s" : "")</strong> scheduled for delivery today.</span>
+        </div>
+        }
+    </div>
+
+    <!-- Stats Summary Panel -->
+    <div class="dash-panel dash-summary-panel">
+        <div class="dash-panel-header">
+            <div class="dash-panel-title">
+                <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Status Overview
+            </div>
+        </div>
+        <div class="summary-list">
+            <div class="summary-row">
+                <div class="sumrow-label"><span class="sumrow-dot" style="background:#f59e0b"></span>Pending</div>
+                <div class="sumrow-bar-wrap"><div class="sumrow-bar" style="width:@pendPct%;background:#f59e0b"></div></div>
+                <div class="sumrow-pct">@pendPct%</div>
+            </div>
+            <div class="summary-row">
+                <div class="sumrow-label"><span class="sumrow-dot" style="background:#ef4444"></span>Unrepairable</div>
+                <div class="sumrow-bar-wrap"><div class="sumrow-bar" style="width:@repPct%;background:#ef4444"></div></div>
+                <div class="sumrow-pct">@repPct%</div>
+            </div>
+            <div class="summary-row">
+                <div class="sumrow-label"><span class="sumrow-dot" style="background:#10b981"></span>Completed</div>
+                <div class="sumrow-bar-wrap"><div class="sumrow-bar" style="width:@compPct%;background:#10b981"></div></div>
+                <div class="sumrow-pct">@compPct%</div>
+            </div>
+            <div class="summary-row">
+                <div class="sumrow-label"><span class="sumrow-dot" style="background:#3b82f6"></span>Delivered</div>
+                <div class="sumrow-bar-wrap"><div class="sumrow-bar" style="width:@delPct%;background:#3b82f6"></div></div>
+                <div class="sumrow-pct">@delPct%</div>
+            </div>
+        </div>
+
+        <!-- Efficiency Score -->
+        <div class="eff-score-wrap">
+            <div class="eff-score-label">Delivery Efficiency</div>
+            @{
+                int effScore = total > 0 ? (int)Math.Round((double)(completed + delivered) / total * 100) : 0;
+            }
+            <div class="eff-score-bar-wrap">
+                <div class="eff-score-bar" style="width:@effScore%"></div>
+            </div>
+            <div class="eff-score-num">@effScore%</div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+<script>
+// ── Live Clock
+function updateClock() {
+    const now = new Date();
+    document.getElementById('liveClock').textContent = now.toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+    document.getElementById('liveDate').textContent  = now.toLocaleDateString('en-IN', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+    const h = now.getHours();
+    const g = h < 12 ? 'Good morning,' : h < 17 ? 'Good afternoon,' : 'Good evening,';
+    document.getElementById('greetingText').textContent = g;
+}
+updateClock(); setInterval(updateClock, 1000);
+
+// ── Counter Animation
+document.querySelectorAll('.counter').forEach(el => {
+    const target = parseInt(el.dataset.target) || 0;
+    if (target === 0) { el.textContent = '0'; return; }
+    let start = 0, duration = 1400;
+    const step = timestamp => {
+        if (!start) start = timestamp;
+        const prog = Math.min((timestamp - start) / duration, 1);
+        el.textContent = Math.floor(prog * target);
+        if (prog < 1) requestAnimationFrame(step);
+        else el.textContent = target;
+    };
+    requestAnimationFrame(step);
+});
+</script>
+}

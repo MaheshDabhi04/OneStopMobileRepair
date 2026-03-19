@@ -1,0 +1,58 @@
+@model IEnumerable<OneStopMobileRepair.Models.Customer>
+
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Customer Name</th>
+            <th>Mobile</th>
+            <th>Brand / Model</th>
+            <th>Status</th>
+            <th>Deposit (₹)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int rowNum = 1;}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><strong>@rowNum</strong></td>
+                <td><strong>@item.CustomerName</strong></td>
+                <td>@item.MobileNumber</td>
+                <td>@item.Brand &nbsp;@item.Model</td>
+                <td>
+                    @if (item.Status == "Pending")
+                    {
+                        <span class="badge badge-pending">⏳ Pending</span>
+                    }
+                    else if (item.Status == "Unrepairable")
+                    {
+                        <span class="badge badge-unrepairable">❌ Unrepairable</span>
+                    }
+                    else if (item.Status == "Completed")
+                    {
+                        <span class="badge badge-completed">✅ Completed</span>
+                    }
+                    else if (item.Status == "Delivered")
+                    {
+                        <span class="badge badge-delivered">📦 Delivered</span>
+                    }
+                    else
+                    {
+                        <span class="badge" style="background:rgba(100,116,139,0.2);color:#94a3b8;border:1px solid #334155;">— Unknown</span>
+                    }
+                </td>
+                <td><strong>₹@item.Deposit</strong></td>
+                <td>
+                    <div class="actions-cell">
+                        <a href="/Customers/Details/@item.Id" class="btn-admin btn-view" style="padding:6px 12px;font-size:12px;">👁 View</a>
+                        <a href="/Customers/Edit/@item.Id" class="btn-admin btn-edit" style="padding:6px 12px;font-size:12px;">✏️ Edit</a>
+                        <a href="/Customers/Delete/@item.Id" class="btn-admin btn-delete" style="padding:6px 12px;font-size:12px;">🗑 Delete</a>
+                    </div>
+                </td>
+            </tr>
+            rowNum++;
+        }
+    </tbody>
+</table>

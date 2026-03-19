@@ -1,0 +1,183 @@
+@model IEnumerable<OneStopMobileRepair.Models.Enquiry>
+@{
+    ViewData["Title"] = "Check Inquiry Status";
+    Layout = "_Layout"; // Assuming a default layout exists
+}
+
+<style>
+    .status-container {
+        max-width: 800px;
+        margin: 100px auto;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    .header-section {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .header-section h1 {
+        font-size: 2.5rem;
+        background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 10px;
+    }
+
+    .search-box {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .search-box input {
+        flex: 1;
+        background: rgba(0,0,0,0.2);
+        border: 1px solid rgba(255,255,255,0.2);
+        padding: 15px 20px;
+        border-radius: 12px;
+        color: #fff;
+        font-size: 1.1rem;
+        transition: border-color 0.3s;
+    }
+
+    .search-box input:focus {
+        outline: none;
+        border-color: #4facfe;
+    }
+
+    .btn-search {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        border: none;
+        padding: 0 30px;
+        border-radius: 12px;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.3s;
+    }
+
+    .btn-search:hover {
+        transform: scale(1.05);
+    }
+
+    .enquiry-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        transition: transform 0.3s;
+    }
+
+    .enquiry-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+    .badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .badge-new { background: #4facfe; color: #fff; }
+    .badge-resolved { background: #00ff88; color: #000; }
+    .badge-contacted { background: #ffd700; color: #000; }
+
+    .admin-reply {
+        margin-top: 20px;
+        padding: 20px;
+        background: rgba(79, 172, 254, 0.1);
+        border-left: 4px solid #4facfe;
+        border-radius: 0 10px 10px 0;
+    }
+
+    .admin-reply h4 {
+        margin: 0 0 10px 0;
+        color: #4facfe;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .placeholder-text {
+        text-align: center;
+        color: rgba(255,255,255,0.4);
+        padding: 40px;
+    }
+</style>
+
+<div class="status-container">
+    <div class="header-section">
+        <h1>🔍 Check Status</h1>
+        <p>Enter your mobile number to check the status of your repair inquiry</p>
+    </div>
+
+    <form asp-action="CheckStatus" method="post" class="search-box">
+        <input type="text" name="phone" placeholder="Enter Mobile Number (e.g. 9876543210)" value="@ViewBag.Phone" required />
+        <button type="submit" class="btn-search">Search</button>
+    </form>
+
+    @if (Model != null)
+    {
+        if (Model.Any())
+        {
+            <div class="results-section">
+                @foreach (var item in Model)
+                {
+                    <div class="enquiry-card">
+                        <div class="card-header">
+                            <div>
+                                <span style="color: #4facfe; font-weight: 600;">@item.Service</span>
+                                <span style="color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-left: 10px;">@item.Device</span>
+                            </div>
+                            <span class="badge badge-@(item.Status?.ToLower())">@item.Status</span>
+                        </div>
+                        
+                        <div style="color: rgba(255,255,255,0.8); line-height: 1.6;">
+                            <strong>Message:</strong> @item.Message
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(item.AdminReply))
+                        {
+                            <div class="admin-reply">
+                                <h4>💬 Admin Reply</h4>
+                                <p style="margin: 0; color: #fff;">@item.AdminReply</p>
+                                <div style="font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-top: 10px;">
+                                    Replied on: @item.ReplyDate?.ToString("dd MMM yyyy, hh:mm tt")
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div style="margin-top: 15px; font-size: 0.9rem; color: rgba(255,255,255,0.5); font-style: italic;">
+                                ⏳ Waiting for admin to review...
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="placeholder-text">
+                <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 20px; display: block;"></i>
+                No inquiries found for this mobile number.
+            </div>
+        }
+    }
+</div>

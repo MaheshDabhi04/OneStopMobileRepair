@@ -1,0 +1,161 @@
+@model IEnumerable<OneStopMobileRepair.Models.Enquiry>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Customer Enquiries";
+}
+
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h2>✉️ Customer Enquiries</h2>
+        <p>Manage and respond to enquiries from the website</p>
+    </div>
+</div>
+
+<div class="table-card">
+    <div class="table-card-header">
+        <div class="table-card-title">📋 Website Enquiries</div>
+        <div class="search-wrap">
+            <input type="text" id="enquirySearch" class="admin-search" placeholder="Search name or phone..." />
+        </div>
+    </div>
+
+    <div style="overflow-x:auto;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Service & Device</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="enquiryEntries">
+                @foreach (var item in Model)
+                {
+                    <tr data-id="@item.Id">
+                        <td>
+                            <div style="font-size:13px; font-weight:600;">@item.CreatedAt.ToString("dd MMM yyyy")</div>
+                            <div style="font-size:11px; color:var(--text-muted)">@item.CreatedAt.ToString("hh:mm tt")</div>
+                        </td>
+                        <td>
+                            <div style="font-weight:700; color:#fff;">@item.Name</div>
+                            <div style="font-size:12px; color:var(--accent); font-weight:600;">@item.Phone</div>
+                        </td>
+                        <td>
+                            <div style="color:var(--text-primary); font-weight:600;">@item.Service</div>
+                            <div style="font-size:11px; color:var(--text-muted)">@item.Device</div>
+                        </td>
+                        <td>
+                            <div style="max-width:250px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:12px;" title="@item.Message">
+                                @item.Message
+                            </div>
+                            @if (!string.IsNullOrEmpty(item.FrontImagePath) || !string.IsNullOrEmpty(item.BackImagePath))
+                            {
+                                <div style="margin-top:5px; display:flex; gap:10px;">
+                                    @if (!string.IsNullOrEmpty(item.FrontImagePath))
+                                    {
+                                        <a href="@item.FrontImagePath" target="_blank" style="text-decoration:none;" title="Front View">
+                                            <img src="@item.FrontImagePath" alt="Front" style="max-width:80px; max-height:80px; border-radius:4px; border:1px solid var(--border);" />
+                                        </a>
+                                    }
+                                    @if (!string.IsNullOrEmpty(item.BackImagePath))
+                                    {
+                                        <a href="@item.BackImagePath" target="_blank" style="text-decoration:none;" title="Back View">
+                                            <img src="@item.BackImagePath" alt="Back" style="max-width:80px; max-height:80px; border-radius:4px; border:1px solid var(--border);" />
+                                        </a>
+                                    }
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            <select class="status-select" onchange="updateStatus(@item.Id, this.value)" 
+                                    style="background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border); border-radius:4px; padding:4px 8px; font-size:12px;">
+                                <option value="New" selected="@(item.Status == "New")">New</option>
+                                <option value="Contacted" selected="@(item.Status == "Contacted")">Contacted</option>
+                                <option value="Resolved" selected="@(item.Status == "Resolved")">Resolved</option>
+                                <option value="Junk" selected="@(item.Status == "Junk")">Junk</option>
+                            </select>
+                        </td>
+                        <td>
+                            <div style="display:flex; gap:8px;">
+                                <button onclick="showReplyModal(@item.Id, '@item.AdminReply')" class="btn-admin" style="padding:6px 10px; font-size:11px; background:var(--accent);">Reply</button>
+                                <button onclick="deleteEnquiry(@item.Id)" class="btn-admin btn-delete" style="padding:6px 10px; font-size:11px;">Delete</button>
+                            </div>
+                            @if (!string.IsNullOrEmpty(item.AdminReply))
+                            {
+                                <div style="margin-top:5px; font-size:11px; color:var(--accent); font-style:italic;">
+                                    Replied: @item.AdminReply
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Reply Modal -->
+<div id="replyModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
+    <div style="background:var(--bg-panel); padding:25px; border-radius:12px; width:400px; border:1px solid var(--border);">
+        <h3 style="margin-top:0;">💬 Send Reply</h3>
+        <input type="hidden" id="replyEnquiryId" />
+        <textarea id="replyText" style="width:100%; height:120px; background:var(--bg-card); color:#fff; border:1px solid var(--border); border-radius:8px; padding:10px; margin:15px 0; font-family:inherit;" placeholder="Enter your reply here..."></textarea>
+        <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button onclick="$('#replyModal').hide()" style="background:none; border:none; color:var(--text-muted); cursor:pointer;">Cancel</button>
+            <button onclick="submitReply()" class="btn-admin" style="background:var(--accent); padding:8px 20px;">Save Reply</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function showReplyModal(id, currentReply) {
+        $("#replyEnquiryId").val(id);
+        $("#replyText").val(currentReply === "null" ? "" : currentReply);
+        $("#replyModal").css("display", "flex");
+    }
+
+    function submitReply() {
+        var id = $("#replyEnquiryId").val();
+        var reply = $("#replyText").val();
+        
+        $.post("/Enquiries/AddReply", { id: id, reply: reply }, function(res) {
+            if (res.success) {
+                location.reload();
+            } else {
+                alert("Failed to save reply");
+            }
+        });
+    }
+
+    function updateStatus(id, newStatus) {
+        $.post("/Enquiries/UpdateStatus", { id: id, status: newStatus }, function(res) {
+            if (!res.success) alert("Failed to update status");
+        });
+    }
+
+    function deleteEnquiry(id) {
+        if (confirm("Are you sure you want to delete this enquiry?")) {
+            $.post("/Enquiries/Delete", { id: id }, function(res) {
+                if (res.success) {
+                    $(`tr[data-id="${id}"]`).fadeOut();
+                } else {
+                    alert("Failed to delete");
+                }
+            });
+        }
+    }
+
+    $("#enquirySearch").keyup(function () {
+        var value = $(this).val().toLowerCase();
+        $("#enquiryEntries tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+</script>
+}

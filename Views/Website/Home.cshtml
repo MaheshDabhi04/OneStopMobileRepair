@@ -1,0 +1,128 @@
+@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="laser-line"></div>
+<div class="progress-bar" id="progressBar"></div>
+<div class="particles" id="particles"></div>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-bg-orb orb1"></div>
+    <div class="hero-bg-orb orb2"></div>
+    <div class="hero-bg-orb orb3"></div>
+
+    <p class="hero-eyebrow">&#128205; Morbi, Gujarat</p>
+    <h1>OneStop<br />Mobile Repair</h1>
+    <p class="hero-sub">
+        Morbi's first shop with green line display solution using
+        <strong>advanced laser technology</strong> &mdash; precision repair for every smartphone.
+    </p>
+    <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Now Open &middot; Expert Technicians
+    </div>
+    <div class="hero-cta">
+        <a asp-controller="Website" asp-action="Contact" class="btn btn-primary">Book a Repair</a>
+        <a asp-controller="Website" asp-action="About" class="btn btn-outline">Learn More</a>
+    </div>
+    <div class="scroll-indicator">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="highlight-strip">
+    <div class="highlight-item">
+        <div class="highlight-num">500+</div>
+        <div class="highlight-txt">Devices Fixed</div>
+    </div>
+    <div class="highlight-item">
+        <div class="highlight-num">8+</div>
+        <div class="highlight-txt">Services</div>
+    </div>
+    <div class="highlight-item">
+        <div class="highlight-num">24hr</div>
+        <div class="highlight-txt">Fast Turnaround</div>
+    </div>
+    <div class="highlight-item">
+        <div class="highlight-num">#1</div>
+        <div class="highlight-txt">In Morbi</div>
+    </div>
+</div>
+
+<!-- SERVICES -->
+<section class="os-section os-section-alt">
+    <div style="max-width:700px; margin-bottom:3.5rem;">
+        <span class="section-label">What We Do</span>
+        <h2 class="section-title">Our <span>Services</span></h2>
+        <div class="divider"></div>
+    </div>
+    <div class="services-grid">
+        <div class="service-card">
+            <span class="service-icon">&#129001;</span>
+            <div class="service-name">Green Line Remove</div>
+            <div class="service-desc">Advanced laser-based green line removal &mdash; Morbi's first and finest.</div>
+            <span class="tag">Laser Tech</span>
+        </div>
+        <div class="service-card">
+            <span class="service-icon">&#128421;</span>
+            <div class="service-name">Green / White Display Solution</div>
+            <div class="service-desc">Complete display fault diagnosis and repair for all smartphone models.</div>
+            <span class="tag">Display Expert</span>
+        </div>
+        <div class="service-card">
+            <span class="service-icon">&#128300;</span>
+            <div class="service-name">OCA Glass Change</div>
+            <div class="service-desc">Optical clear adhesive glass replacement for crystal-clear screens.</div>
+            <span class="tag">Precision</span>
+        </div>
+        <div class="service-card">
+            <span class="service-icon">&#128241;</span>
+            <div class="service-name">Original Display Replacement</div>
+            <div class="service-desc">100% genuine display units for iPhone, Samsung &amp; all major brands.</div>
+            <span class="tag">Genuine Parts</span>
+        </div>
+        <div class="service-card">
+            <span class="service-icon">&#128247;</span>
+            <div class="service-name">Camera Problem Solve</div>
+            <div class="service-desc">Blurry, black, or non-functional camera? We fix it fast.</div>
+            <span class="tag">Camera Repair</span>
+        </div>
+        <div class="service-card">
+            <span class="service-icon">&#128267;</span>
+            <div class="service-name">Battery Replacement</div>
+            <div class="service-desc">Restore full-day battery life with quality cell replacements.</div>
+            <span class="tag">Long Life</span>
+        </div>
+        <div class="service-card">
+            <span class="service-icon">&#127822;</span>
+            <div class="service-name">iPhone / Samsung Back Glass</div>
+            <div class="service-desc">Premium back glass replacement &mdash; looks brand new again.</div>
+            <span class="tag">Back Glass</span>
+        </div>
+        <div class="service-card">
+            <span class="service-icon">&#128190;</span>
+            <div class="service-name">Software Repair</div>
+            <div class="service-desc">Flashing, unlocking, boot loops &mdash; software restored to perfection.</div>
+            <span class="tag">Software</span>
+        </div>
+    </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="os-section cta-band">
+    <span class="section-label">Ready?</span>
+    <h2 class="section-title">Need a Repair? <span>Let's Fix It.</span></h2>
+    <p class="cta-sub">Walk in or call us &mdash; same-day service available for most repairs.</p>
+    <div class="cta-buttons">
+        <a asp-controller="Website" asp-action="Contact" class="btn btn-primary">Contact Us</a>
+        <a href="tel:+919033778500" class="btn btn-outline">&#128222; +91 90337 78500</a>
+    </div>
+</section>
+
+

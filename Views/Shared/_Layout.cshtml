@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - OneStopMobileRepair</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/Site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/OneStopMobileRepair.styles.css" asp-append-version="true" />
+    <!--
+        NO inline <style> block here — all CSS is in Site.css
+        This avoids the CS0103 Razor error caused by media inside <style> tags
+    -->
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg os-navbar">
+        <div class="container-fluid px-0">
+            <a class="navbar-brand os-brand" asp-controller="Website" asp-action="Home">
+                <div class="os-brand-img-wrap">
+                    <img src="~/images/logo.png" alt="OneStop Logo" />
+                </div>
+                <div class="os-brand-text">
+                    <span class="brand-main">OneStop</span>
+                    <span class="brand-sub">Mobile Repair &middot; Morbi</span>
+                </div>
+            </a>
+            <button class="navbar-toggler os-toggler" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link os-nav-link" asp-controller="Website" asp-action="Home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link os-nav-link" asp-controller="Website" asp-action="About">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link os-nav-link" asp-controller="Website" asp-action="Services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link os-nav-link" asp-controller="Website" asp-action="Contact">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link os-nav-link" asp-controller="Website" asp-action="CheckStatus" style="color: #4facfe; font-weight: 700;">Check Status</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="os-btn-admin" asp-controller="Account" asp-action="Login">
+                            &#9881; Admin Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT — full width, no Bootstrap container -->
+    <div class="os-main-wrapper">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="os-site-footer">
+        <p>
+            &copy; 2026 <span>OneStop Mobile Repair</span> &nbsp;&middot;&nbsp; Morbi, Gujarat
+        </p>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

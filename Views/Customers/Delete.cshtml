@@ -1,0 +1,39 @@
+@model OneStopMobileRepair.Models.Customer
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Delete Customer";
+    ViewData["PageTitle"] = "Delete Customer";
+}
+
+<div class="page-header">
+    <div>
+        <h2>🗑 Delete Customer</h2>
+        <p>This action cannot be undone</p>
+    </div>
+    <a href="/Customers/Index" class="btn-admin btn-outline">← Back to Customers</a>
+</div>
+
+<div class="delete-card">
+    <div class="delete-icon">🗑️</div>
+
+    <h3>Delete This Record?</h3>
+    <p>You are about to permanently delete the repair job for:</p>
+
+    <div class="delete-name">@Model.CustomerName</div>
+
+    <p style="font-size:13px;color:#64748b;margin-bottom:4px;">
+        📞 @Model.MobileNumber &nbsp;·&nbsp; @Model.Brand @Model.Model
+    </p>
+    <p style="font-size:13px;color:#64748b;">
+        ⚠️ This will remove all records including images and cannot be recovered.
+    </p>
+
+    <div class="delete-actions" style="margin-top:24px;">
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn-admin btn-danger-full">🗑 Yes, Delete Permanently</button>
+        </form>
+        <a href="/Customers/Details/@Model.Id" class="btn-admin btn-outline">Cancel</a>
+    </div>
+</div>

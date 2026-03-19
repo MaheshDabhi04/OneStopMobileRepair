@@ -1,0 +1,202 @@
+@{
+    ViewData["Title"] = "Contact Us";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="laser-line"></div>
+<div class="progress-bar" id="progressBar"></div>
+<div class="particles" id="particles"></div>
+
+<!-- PAGE BANNER -->
+<div class="page-banner">
+    <div class="hero-bg-orb orb1"></div>
+    <div class="hero-bg-orb orb2"></div>
+    <p class="banner-eyebrow">We're Here to Help</p>
+    <h1>Contact Us</h1>
+    <p>Call us, visit us, or find us on Instagram &mdash; we're always ready to help with your repair.</p>
+</div>
+
+<!-- MAIN CONTACT -->
+<section class="os-section">
+    <div class="contact-layout">
+
+        <!-- LEFT: INFO + MAP -->
+        <div>
+            <span class="section-label">Reach Us</span>
+            <h2 class="section-title" style="margin-bottom:1rem;">Get In <span>Touch</span></h2>
+            <div class="divider"></div>
+
+            <p class="info-top-text">
+                Walk in, call us, or message us on Instagram. We're available Monday through Saturday
+                and offer same-day repair for most common issues.
+            </p>
+
+            <a href="tel:+919033778500" class="social-card">
+                <div class="social-icon">&#128222;</div>
+                <div>
+                    <div class="social-label">Call Us</div>
+                    <div class="social-value">+91 90337 78500</div>
+                </div>
+            </a>
+
+            <a href="https://www.instagram.com/onestop_mobilerepairing" target="_blank" rel="noopener" class="social-card">
+                <div class="social-icon">&#128247;</div>
+                <div>
+                    <div class="social-label">Instagram</div>
+                    <div class="social-value">onestop_mobilerepairing</div>
+                </div>
+            </a>
+
+            <a href="https://maps.app.goo.gl/J2i3v7p3t4qzMg1T9" target="_blank" rel="noopener" class="social-card">
+                <div class="social-icon">&#128205;</div>
+                <div>
+                    <div class="social-label">Find Us</div>
+                    <div class="social-value">Open in Google Maps &rarr;</div>
+                </div>
+            </a>
+
+            <div class="contact-card" style="cursor:default;">
+                <div class="contact-icon">&#8987;</div>
+                <div>
+                    <div class="contact-info-label">Working Hours</div>
+                    <div class="contact-info-value">Mon &ndash; Sat &nbsp;|&nbsp; 9:00 AM &ndash; 8:00 PM</div>
+                </div>
+            </div>
+
+            <div style="margin-top:2rem;">
+                <p class="section-label" style="margin-bottom:1rem;">Our Location</p>
+                <div class="map-embed">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14793.43!2d70.8370!3d22.8173!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3959cba7d6a12345%3A0xabcdef1234567890!2sMorbi%2C+Gujarat!5e0!3m2!1sen!2sin!4v1"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="OneStop Mobile Repair Location">
+                    </iframe>
+                    <div class="map-overlay"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: FORM + FAQ -->
+        <div>
+
+            <!-- ENQUIRY FORM -->
+            <div class="form-card">
+                <div class="form-title">Send an Enquiry</div>
+                <div class="form-subtitle">Fill the form below and we'll get back to you shortly.</div>
+
+                <!-- SUCCESS MESSAGE -->
+                <div class="form-success" id="formSuccess">
+                    <span class="success-icon">&#9989;</span>
+                    <h3>Message Sent!</h3>
+                    <p>Thank you for reaching out. We'll contact you soon on your number.</p>
+                </div>
+
+                <!-- FORM BODY -->
+                <div id="formBody">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="txtName">Your Name</label>
+                            <input type="text" id="txtName" name="Name" class="form-input" placeholder="Raj Patel" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="txtPhone">Phone Number</label>
+                            <input type="tel" id="txtPhone" name="Phone" class="form-input" placeholder="+91 98765 43210" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="ddlService">Service Needed</label>
+                        <select id="ddlService" name="Service" class="form-select">
+                            <option value="">-- Select a Service --</option>
+                            <option>Green Line Remove</option>
+                            <option>Green / White Display Solution</option>
+                            <option>OCA Glass Change</option>
+                            <option>Original Display Replacement</option>
+                            <option>Camera Problem Solve</option>
+                            <option>Battery Replacement</option>
+                            <option>iPhone / Samsung Back Glass</option>
+                            <option>Software Repair</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="txtDevice">Device Model</label>
+                        <input type="text" id="txtDevice" name="Device" class="form-input" placeholder="e.g. iPhone 14, Samsung S23..." />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="txtMessage">Message (Optional)</label>
+                        <textarea id="txtMessage" name="Message" class="form-textarea" placeholder="Describe your issue briefly..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="fileFrontImage">Front Device Photo (Optional)</label>
+                            <input type="file" id="fileFrontImage" name="FrontImageFile" class="form-input" accept="image/*" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="fileBackImage">Back Device Photo (Optional)</label>
+                            <input type="file" id="fileBackImage" name="BackImageFile" class="form-input" accept="image/*" />
+                        </div>
+                    </div>
+                    <button type="button" class="submit-btn" onclick="handleSubmit()">
+                        SEND ENQUIRY &rarr;
+                    </button>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div style="margin-top:2.5rem;">
+                <span class="section-label" style="margin-bottom:1.2rem; display:block;">Common Questions</span>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFAQ(this)">
+                        How long does a green line repair take?
+                        <span class="faq-arrow">&#9660;</span>
+                    </button>
+                    <div class="faq-a">
+                        Most green line laser treatments are completed within 1&ndash;3 hours depending on the device model.
+                        We'll give you an exact estimate when you walk in.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFAQ(this)">
+                        Do you use original parts?
+                        <span class="faq-arrow">&#9660;</span>
+                    </button>
+                    <div class="faq-a">
+                        Yes &mdash; we only use genuine, high-quality parts for all replacements.
+                        We'll let you know if an OEM alternative is needed and get your approval first.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFAQ(this)">
+                        Is there a warranty on repairs?
+                        <span class="faq-arrow">&#9660;</span>
+                    </button>
+                    <div class="faq-a">
+                        All our repairs include a service warranty. If the same issue reoccurs within
+                        the warranty period, we'll fix it free of charge.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFAQ(this)">
+                        Which brands do you service?
+                        <span class="faq-arrow">&#9660;</span>
+                    </button>
+                    <div class="faq-a">
+                        We repair all major brands including Apple iPhone, Samsung, OnePlus, Xiaomi,
+                        Oppo, Vivo, Realme, and more. If it's a smartphone, we can most likely fix it.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+

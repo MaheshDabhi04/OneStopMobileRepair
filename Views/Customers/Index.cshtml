@@ -1,0 +1,51 @@
+@model IEnumerable<OneStopMobileRepair.Models.Customer>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Customers";
+    ViewData["PageTitle"] = "All Customers";
+}
+
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h2>👥 Customer Records</h2>
+        @if (ViewData["CurrentFilter"] != null)
+        {
+            <p>Showing: <strong style="color:var(--accent)">@ViewData["CurrentFilter"]</strong> | <a href="/Customers/Index" style="color:var(--danger); text-decoration:none; font-size:12px; font-weight:700;">✖ Clear Filter</a></p>
+        }
+        else
+        {
+            <p>Manage all repair jobs and customer information</p>
+        }
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;">
+        <a href="/Customers/Reminder" class="btn-admin btn-edit">🔔 Reminders</a>
+        <a href="/Customers/Create" class="btn-admin btn-primary">➕ Add New Customer</a>
+    </div>
+</div>
+
+<!-- Table Card -->
+<div class="table-card">
+    <div class="table-card-header">
+        <div class="table-card-title">📋 All Records</div>
+        <div class="search-wrap">
+            <input type="text" id="searchBox" class="admin-search" placeholder="Search name or mobile..." />
+        </div>
+    </div>
+
+    <div id="customerTable" style="overflow-x:auto;">
+        @await Html.PartialAsync("_CustomerTable", Model)
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $("#searchBox").keyup(function () {
+        var value = $(this).val();
+        $.get("/Customers/Search?term=" + value, function (data) {
+            $("#customerTable").html(data);
+        });
+    });
+</script>
+}

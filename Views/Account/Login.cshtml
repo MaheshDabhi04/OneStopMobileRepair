@@ -1,0 +1,40 @@
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    ViewData["Title"] = "Admin Login";
+}
+
+<div class="login-card">
+    <div class="login-logo">
+        <div class="logo-icon">📱</div>
+        <h1>Admin Login</h1>
+        <p>OneStop Mobile Repair · Morbi</p>
+    </div>
+
+    <form method="post">
+        <div class="login-form-group">
+            <label for="email">Email Address</label>
+            <div class="login-input-wrap">
+                <span class="input-icon">✉</span>
+                <input type="email" id="email" name="email" required placeholder="admin@example.com" />
+            </div>
+        </div>
+
+        <div class="login-form-group">
+            <label for="password">Password</label>
+            <div class="login-input-wrap">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="password" name="password" required placeholder="Enter your password" />
+            </div>
+        </div>
+
+        <button type="submit" class="btn-login">🚀 Sign In to Dashboard</button>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="login-error">
+                <span>⚠️</span>
+                <span>@ViewBag.Error</span>
+            </div>
+        }
+    </form>
+</div>

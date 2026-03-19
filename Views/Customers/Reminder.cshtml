@@ -1,0 +1,62 @@
+﻿@model IEnumerable<OneStopMobileRepair.Models.Customer>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Delivery Reminders";
+}
+
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h2>⏰ Delivery Reminders</h2>
+        <p>Customers with pending deliveries for today or overdue</p>
+    </div>
+</div>
+
+<div class="table-card">
+    <div class="table-card-header">
+        <div class="table-card-title">📋 Upcoming Deliveries</div>
+    </div>
+
+    <div style="overflow-x:auto;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Device Info</th>
+                    <th>Delivery Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <div style="font-weight:700; color:#fff;">@item.CustomerName</div>
+                            <div style="font-size:12px; color:var(--accent); font-weight:600;">@item.MobileNumber</div>
+                        </td>
+                        <td>
+                            <div style="color:var(--text-primary); font-weight:600;">@item.Brand @item.Model</div>
+                        </td>
+                        <td>
+                            <div style="font-size:13px; font-weight:600;">@item.CreditTime?.ToString("dd MMM yyyy")</div>
+                        </td>
+                        <td>
+                            <span class="status-badge" style="background:rgba(99, 102, 241, 0.15); color:var(--accent); padding:4px 10px; border-radius:12px; font-size:11px; font-weight:700;">
+                                @item.Status
+                            </span>
+                        </td>
+                        <td>
+                            <a href="/Customers/Edit/@item.Id" class="btn-admin btn-edit" style="text-decoration:none; padding:6px 12px; font-size:11px;">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div style="margin-top:20px;">
+    <a href="/Home/Index" class="btn-admin" style="text-decoration:none; display:inline-block; background:var(--bg-card); border:1px solid var(--border);">Back to Dashboard</a>
+</div>

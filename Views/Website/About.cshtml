@@ -1,0 +1,194 @@
+@{
+    ViewData["Title"] = "About Us";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="laser-line"></div>
+<div class="progress-bar" id="progressBar"></div>
+<div class="particles" id="particles"></div>
+
+<!-- PAGE BANNER -->
+<div class="page-banner">
+    <div class="hero-bg-orb orb1"></div>
+    <div class="hero-bg-orb orb2"></div>
+    <p class="banner-eyebrow">Our Story</p>
+    <h1>About Us</h1>
+    <p>Morbi's trusted smartphone repair specialists &mdash; built on expertise, precision, and trust.</p>
+</div>
+
+<!-- INTRO -->
+<section class="os-section">
+    <div class="two-col">
+        <div class="about-body">
+            <span class="section-label">Who We Are</span>
+            <h2 class="section-title">Expert Repair,<br /><span>Zero Compromise</span></h2>
+            <div class="divider"></div>
+            <p>
+                OneStop Mobile Repair is Morbi's trusted destination for professional smartphone repair.
+                We specialize in complex display issues &mdash; including green and white line solutions &mdash;
+                using cutting-edge laser technology unavailable anywhere else in the city.
+            </p>
+            <p style="margin-top:1rem;">
+                From display replacement to motherboard-level repair, our skilled technicians handle
+                every device with precision, speed, and genuine care for your gadget.
+            </p>
+            <p style="margin-top:1rem;">
+                We service all major brands: iPhone, Samsung, OnePlus, Xiaomi, Oppo, Vivo, and more.
+                No matter the problem &mdash; we have the tools and expertise to fix it.
+            </p>
+            <a asp-controller="Website" asp-action="Contact" class="btn btn-primary" style="margin-top:1.5rem; display:inline-block;">
+                Contact Us Today
+            </a>
+        </div>
+        <div>
+            <div class="two-stats">
+                <div class="stat-card">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Devices Fixed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Laser Precision</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24hr</div>
+                    <div class="stat-label">Fast Turnaround</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">#1</div>
+                    <div class="stat-label">In Morbi</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="os-section os-section-alt">
+    <div style="max-width:700px; margin-bottom:3.5rem;">
+        <span class="section-label">Our Edge</span>
+        <h2 class="section-title">Why Choose <span>OneStop?</span></h2>
+        <div class="divider"></div>
+    </div>
+    <div class="why-grid">
+        <div class="why-card">
+            <span class="why-icon">&#9889;</span>
+            <div class="why-title">Laser Technology</div>
+            <div class="why-desc">Morbi's first and only shop using advanced laser tech to remove green/white display lines permanently.</div>
+        </div>
+        <div class="why-card">
+            <span class="why-icon">&#9989;</span>
+            <div class="why-title">Genuine Parts Only</div>
+            <div class="why-desc">We use 100% original display units, batteries, and components for lasting repairs.</div>
+        </div>
+        <div class="why-card">
+            <span class="why-icon">&#128336;</span>
+            <div class="why-title">Fast Turnaround</div>
+            <div class="why-desc">Most repairs completed same day. We value your time as much as we value your device.</div>
+        </div>
+        <div class="why-card">
+            <span class="why-icon">&#128737;</span>
+            <div class="why-title">Repair Warranty</div>
+            <div class="why-desc">All repairs come with a service warranty. We stand behind every job we do.</div>
+        </div>
+        <div class="why-card">
+            <span class="why-icon">&#128176;</span>
+            <div class="why-title">Transparent Pricing</div>
+            <div class="why-desc">No hidden fees. You know the price before we begin &mdash; always honest, always fair.</div>
+        </div>
+        <div class="why-card">
+            <span class="why-icon">&#128242;</span>
+            <div class="why-title">All Brands Serviced</div>
+            <div class="why-desc">iPhone, Samsung, Xiaomi, OnePlus, Oppo, Vivo &mdash; we fix them all.</div>
+        </div>
+    </div>
+</section>
+
+<!-- TECHNOLOGY -->
+<section class="os-section">
+    <div style="max-width:700px; margin-bottom:3.5rem;">
+        <span class="section-label">How We Work</span>
+        <h2 class="section-title">Our <span>Technology</span></h2>
+        <div class="divider"></div>
+    </div>
+    <div class="tech-grid">
+        <div class="tech-card">
+            <span class="tech-icon">&#128300;</span>
+            <div class="tech-title">Laser Precision</div>
+            <div class="tech-desc">Our laser machine targets display faults at the micro level, solving problems other shops cannot.</div>
+        </div>
+        <div class="tech-card">
+            <span class="tech-icon">&#129325;</span>
+            <div class="tech-title">OCA Lamination</div>
+            <div class="tech-desc">Optical clear adhesive lamination ensures bubble-free, crystal-clear screen bonds.</div>
+        </div>
+        <div class="tech-card">
+            <span class="tech-icon">&#128295;</span>
+            <div class="tech-title">Motherboard Repair</div>
+            <div class="tech-desc">Micro-soldering and board-level diagnosis for complex hardware failures.</div>
+        </div>
+        <div class="tech-card">
+            <span class="tech-icon">&#128187;</span>
+            <div class="tech-title">Software Tools</div>
+            <div class="tech-desc">Professional flashing equipment for iOS, Android firmware recovery and unlock.</div>
+        </div>
+    </div>
+</section>
+
+<!-- JOURNEY -->
+<section class="os-section os-section-alt">
+    <div class="two-col">
+        <div>
+            <span class="section-label">Our Journey</span>
+            <h2 class="section-title">Built With <span>Passion</span></h2>
+            <div class="divider"></div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">Day One</div>
+                    <div class="timeline-title">Founded in Morbi</div>
+                    <div class="timeline-desc">Started with a mission to bring quality mobile repair to Morbi with honest pricing.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">Milestone</div>
+                    <div class="timeline-title">Laser Tech Introduced</div>
+                    <div class="timeline-desc">Became Morbi's first shop to offer advanced laser display repair.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">Today</div>
+                    <div class="timeline-title">500+ Happy Customers</div>
+                    <div class="timeline-desc">Trusted by hundreds of customers across Morbi for fast, reliable, affordable repairs.</div>
+                </div>
+            </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:1.2rem; justify-content:center;">
+            <div class="contact-card" style="cursor:default;">
+                <div class="contact-icon">&#128205;</div>
+                <div>
+                    <div class="contact-info-label">Location</div>
+                    <div class="contact-info-value">Morbi, Gujarat, India</div>
+                </div>
+            </div>
+            <div class="contact-card" style="cursor:default;">
+                <div class="contact-icon">&#8987;</div>
+                <div>
+                    <div class="contact-info-label">Working Hours</div>
+                    <div class="contact-info-value">Mon &ndash; Sat: 9 AM &ndash; 8 PM</div>
+                </div>
+            </div>
+            <div class="contact-card" style="cursor:default;">
+                <div class="contact-icon">&#128295;</div>
+                <div>
+                    <div class="contact-info-label">Speciality</div>
+                    <div class="contact-info-value">Green Line Laser Removal</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+

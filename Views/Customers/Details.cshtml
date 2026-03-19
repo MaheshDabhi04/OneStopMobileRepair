@@ -1,0 +1,91 @@
+@model OneStopMobileRepair.Models.Customer
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Customer Details";
+    ViewData["PageTitle"] = "Customer Details";
+
+    string statusClass = Model.Status switch {
+        "Pending"      => "badge-pending",
+        "UnRepairable" => "badge-repairing",
+        "Completed"    => "badge-completed",
+        "Delivered"    => "badge-delivered",
+        _              => ""
+    };
+    string statusIcon = Model.Status switch {
+        "Pending"      => "⏳",
+        "UnRepairable" => "🔧",
+        "Completed"    => "✅",
+        "Delivered"    => "📦",
+        _              => "—"
+    };
+}
+
+<div class="page-header">
+    <div>
+        <h2>👁 Customer Details</h2>
+        <p>Repair job record for <strong>@Model.CustomerName</strong></p>
+    </div>
+    <a href="/Customers/Index" class="btn-admin btn-outline">← Back to Customers</a>
+</div>
+
+<div class="detail-card">
+    <!-- Header -->
+    <div class="detail-card-header">
+        <div class="detail-avatar">📱</div>
+        <div>
+            <h2>@Model.CustomerName</h2>
+            <div class="detail-sub">📞 @Model.MobileNumber &nbsp;&nbsp; Job #@Model.Id</div>
+        </div>
+        <div style="margin-left:auto;">
+            <span class="badge @statusClass">@statusIcon @Model.Status</span>
+        </div>
+    </div>
+
+    <!-- Details Grid -->
+    <div class="detail-grid">
+        <div class="detail-row">
+            <div class="detail-label">Brand</div>
+            <div class="detail-value">@Model.Brand</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Model</div>
+            <div class="detail-value">@Model.Model</div>
+        </div>
+        <div class="detail-row full">
+            <div class="detail-label">Problem</div>
+            <div class="detail-value">@(Model.Problem ?? "—")</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Device Password</div>
+            <div class="detail-value">@(Model.DevicePassword ?? "—")</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Status</div>
+            <div class="detail-value"><span class="badge @statusClass">@statusIcon @Model.Status</span></div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Estimate</div>
+            <div class="detail-value">₹@Model.Estimate</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Deposit</div>
+            <div class="detail-value">₹@Model.Deposit</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Entry Date</div>
+            <div class="detail-value">@Model.EntryDate.ToString("dd MMM yyyy")</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Delivery Date</div>
+            <div class="detail-value">@(Model.CreditTime?.ToString("dd MMM yyyy") ?? "Not set")</div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="detail-actions">
+        <a href="/Customers/Edit/@Model.Id" class="btn-admin btn-edit">✏️ Edit</a>
+        <a href="/Customers/Delete/@Model.Id" class="btn-admin btn-delete">🗑 Delete</a>
+        <a href="/Customers/Index" class="btn-admin btn-outline">← Back to List</a>
+    </div>
+</div>
