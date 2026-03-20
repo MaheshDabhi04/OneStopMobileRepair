@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OneStopMobileRepair.Migrations
 {
     /// <inheritdoc />
-    public partial class FixDecimal : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,16 +63,37 @@ namespace OneStopMobileRepair.Migrations
                     Problem = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DevicePassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Estimate = table.Column<decimal>(type: "decimal(10,0)", nullable: false),
-                    Deposit = table.Column<decimal>(type: "decimal(10,0)", nullable: false),
+                    Estimate = table.Column<int>(type: "int", nullable: false),
+                    Deposit = table.Column<int>(type: "int", nullable: false),
                     CreditTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    FrontImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BackImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EntryDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Enquiries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Service = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Device = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AdminReply = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReplyDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FrontImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BackImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Enquiries", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -241,6 +262,9 @@ namespace OneStopMobileRepair.Migrations
 
             migrationBuilder.DropTable(
                 name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "Enquiries");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

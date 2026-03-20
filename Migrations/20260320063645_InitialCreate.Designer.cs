@@ -12,8 +12,8 @@ using OneStopMobileRepair.Models;
 namespace OneStopMobileRepair.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260307063229_SeedAdminUser")]
-    partial class SeedAdminUser
+    [Migration("20260320063645_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -235,9 +235,6 @@ namespace OneStopMobileRepair.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BackImage")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Brand")
                         .HasColumnType("nvarchar(max)");
 
@@ -261,9 +258,6 @@ namespace OneStopMobileRepair.Migrations
                     b.Property<int>("Estimate")
                         .HasColumnType("int");
 
-                    b.Property<string>("FrontImage")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("MobileNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -279,6 +273,54 @@ namespace OneStopMobileRepair.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("OneStopMobileRepair.Models.Enquiry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AdminReply")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BackImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Device")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FrontImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ReplyDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Service")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Enquiries");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
