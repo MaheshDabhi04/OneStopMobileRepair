@@ -39,7 +39,7 @@
 ════════════════════════════════════════════════════ -->
 <div class="kpi-grid">
 
-    <a href="/Customers/Index" class="kpi-card kpi-total" style="--delay:.05s; text-decoration: none;">
+    <div onclick="window.location.href='/Customers/Index'" class="kpi-card kpi-total" style="--delay:.05s; text-decoration: none;">
         <div class="kpi-glow"></div>
         <div class="kpi-top">
             <div class="kpi-icon-wrap kpi-icon-total">
@@ -50,9 +50,9 @@
         <div class="kpi-value counter" data-target="@total">0</div>
         <div class="kpi-label">Total Jobs</div>
         <div class="kpi-bar"><div class="kpi-bar-fill" style="width:100%;background:var(--c-total)"></div></div>
-    </a>
+    </div>
 
-    <a href="/Customers/Index?status=Pending" class="kpi-card kpi-pending" style="--delay:.10s; text-decoration: none;">
+    <div onclick="window.location.href='/Customers/Index?status=Pending'" class="kpi-card kpi-pending" style="--delay:.10s; text-decoration: none;">
         <div class="kpi-glow"></div>
         <div class="kpi-top">
             <div class="kpi-icon-wrap kpi-icon-pending">
@@ -63,9 +63,9 @@
         <div class="kpi-value counter" data-target="@pending">0</div>
         <div class="kpi-label">Pending</div>
         <div class="kpi-bar"><div class="kpi-bar-fill" style="width:@pendPct%;background:var(--c-pending)"></div></div>
-    </a>
+    </div>
 
-    <a href="/Customers/Index?status=Unrepairable" class="kpi-card kpi-unrepairable" style="--delay:.15s; text-decoration: none;">
+    <div onclick="window.location.href='/Customers/Index?status=Unrepairable'" class="kpi-card kpi-unrepairable" style="--delay:.15s; text-decoration: none;">
         <div class="kpi-glow"></div>
         <div class="kpi-top">
             <div class="kpi-icon-wrap kpi-icon-unrepairable">
@@ -75,10 +75,10 @@
         </div>
         <div class="kpi-value counter" data-target="@repairing">0</div>
         <div class="kpi-label">Unrepairable</div>
-        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:@repPct%;background:var(--c-repairing)"></div></div>
-    </a>
+        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:@repPct%;background:var(--c-unrepairable)"></div></div>
+    </div>
 
-    <a href="/Customers/Index?status=Completed" class="kpi-card kpi-completed" style="--delay:.20s; text-decoration: none;">
+    <div onclick="window.location.href='/Customers/Index?status=Completed'" class="kpi-card kpi-completed" style="--delay:.20s; text-decoration: none;">
         <div class="kpi-glow"></div>
         <div class="kpi-top">
             <div class="kpi-icon-wrap kpi-icon-completed">
@@ -89,9 +89,9 @@
         <div class="kpi-value counter" data-target="@completed">0</div>
         <div class="kpi-label">Completed</div>
         <div class="kpi-bar"><div class="kpi-bar-fill" style="width:@compPct%;background:var(--c-completed)"></div></div>
-    </a>
+    </div>
 
-    <a href="/Customers/Index?status=Delivered" class="kpi-card kpi-delivered" style="--delay:.25s; text-decoration: none;">
+    <div onclick="window.location.href='/Customers/Index?status=Delivered'" class="kpi-card kpi-delivered" style="--delay:.25s; text-decoration: none;">
         <div class="kpi-glow"></div>
         <div class="kpi-top">
             <div class="kpi-icon-wrap kpi-icon-delivered">
@@ -102,9 +102,9 @@
         <div class="kpi-value counter" data-target="@delivered">0</div>
         <div class="kpi-label">Delivered</div>
         <div class="kpi-bar"><div class="kpi-bar-fill" style="width:@delPct%;background:var(--c-delivered)"></div></div>
-    </a>
+    </div>
 
-    <a href="/Customers/Index?filter=today" class="kpi-card kpi-today" style="--delay:.30s; text-decoration: none;">
+    <div onclick="window.location.href='/Customers/Index?filter=today'" class="kpi-card kpi-today" style="--delay:.30s; text-decoration: none;">
         <div class="kpi-glow"></div>
         <div class="kpi-top">
             <div class="kpi-icon-wrap kpi-icon-today">
@@ -115,9 +115,9 @@
         <div class="kpi-value counter" data-target="@today">0</div>
         <div class="kpi-label">Delivery Today</div>
         <div class="kpi-bar"><div class="kpi-bar-fill" style="width:100%;background:var(--c-today)"></div></div>
-    </a>
+    </div>
 
-    <a href="/Customers/Index?filter=overdue" class="kpi-card kpi-overdue @(overdue > 0 ? "kpi-pulse" : "")" style="--delay:.35s; text-decoration: none;">
+    <div onclick="window.location.href='/Customers/Reminder'" class="kpi-card kpi-overdue @(overdue > 0 ? "kpi-pulse" : "")" style="--delay:.35s; text-decoration: none;">
         <div class="kpi-glow"></div>
         <div class="kpi-top">
             <div class="kpi-icon-wrap kpi-icon-overdue">
@@ -128,7 +128,33 @@
         <div class="kpi-value counter" data-target="@overdue">0</div>
         <div class="kpi-label">Overdue</div>
         <div class="kpi-bar"><div class="kpi-bar-fill" style="width:100%;background:var(--c-overdue)"></div></div>
-    </a>
+    </div>
+
+    <!-- Daily Expense -->
+    <div onclick="window.location.href='/Expenses/Index'" class="kpi-card" style="--delay:.40s; text-decoration: none; border-bottom: 3px solid var(--accent);">
+        <div class="kpi-glow"></div>
+        <div class="kpi-top">
+            <div class="kpi-icon-wrap" style="background: rgba(99,102,241,0.1); color: var(--accent);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 15h0M2 9h20"/><path d="M12 12v3"/><path d="M12 15h3"/></svg>
+            </div>
+            <div class="kpi-trend kpi-trend-neutral">TODAY</div>
+        </div>
+        <div class="kpi-value" style="font-size: 24px;">₹@ViewBag.DailyExpense</div>
+        <div class="kpi-label">Today's Expense</div>
+    </div>
+
+    <!-- Monthly Expense -->
+    <div onclick="window.location.href='/Expenses/Index'" class="kpi-card" style="--delay:.45s; text-decoration: none; border-bottom: 3px solid #10b981;">
+        <div class="kpi-glow"></div>
+        <div class="kpi-top">
+            <div class="kpi-icon-wrap" style="background: rgba(16,185,129,0.1); color: #10b981;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+            </div>
+            <div class="kpi-trend kpi-trend-success">MONTH</div>
+        </div>
+        <div class="kpi-value" style="font-size: 24px;">₹@ViewBag.MonthlyExpense</div>
+        <div class="kpi-label">Monthly Total</div>
+    </div>
 
 </div>
 
@@ -192,7 +218,7 @@
             </div>
         </div>
         <div class="qa-grid">
-            <a href="/Customers/Create" class="qa-btn qa-primary">
+            <div onclick="window.location.href='/Customers/Create'" class="qa-btn qa-primary" style="cursor: pointer;">
                 <div class="qa-btn-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 </div>
@@ -200,8 +226,8 @@
                     <div class="qa-btn-label">Add New Customer</div>
                     <div class="qa-btn-sub">Register a new repair job</div>
                 </div>
-            </a>
-            <a href="/Customers/Index" class="qa-btn qa-success">
+            </div>
+            <div onclick="window.location.href='/Customers/Index'" class="qa-btn qa-success" style="cursor: pointer;">
                 <div class="qa-btn-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 </div>
@@ -209,8 +235,8 @@
                     <div class="qa-btn-label">View All Customers</div>
                     <div class="qa-btn-sub">Browse & manage records</div>
                 </div>
-            </a>
-            <a href="/Customers/Reminder" class="qa-btn qa-warning">
+            </div>
+            <div onclick="window.location.href='/Customers/Reminder'" class="qa-btn qa-warning" style="cursor: pointer;">
                 <div class="qa-btn-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                 </div>
@@ -218,7 +244,7 @@
                     <div class="qa-btn-label">Delivery Reminders</div>
                     <div class="qa-btn-sub">Check due & overdue jobs</div>
                 </div>
-            </a>
+            </div>
         </div>
 
         <!-- Alert Banner if overdue > 0 -->
@@ -226,7 +252,7 @@
         <div class="dash-alert-banner">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             <span><strong>@overdue job@(overdue > 1 ? "s" : "")</strong> overdue! Please check delivery reminders immediately.</span>
-            <a href="/Customers/Reminder" class="dash-alert-link">View →</a>
+            <div onclick="window.location.href='/Customers/Reminder'" class="dash-alert-link" style="cursor: pointer; display: inline-block;">View →</div>
         </div>
         }
 

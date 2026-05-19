@@ -96,18 +96,27 @@
 
                 <!-- FORM BODY -->
                 <div id="formBody">
+                    <style>
+                        .enq-err { color:#ff2d78; font-size:12px; margin-top:4px; display:none; }
+                        .enq-err.show { display:block; }
+                        .form-input.inp-err, .form-select.inp-err { border-color:#ff2d78 !important; box-shadow:0 0 0 2px rgba(255,45,120,.18); }
+                        .form-input.inp-ok, .form-select.inp-ok { border-color:#10b981 !important; }
+                    </style>
+
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="txtName">Your Name</label>
-                            <input type="text" id="txtName" name="Name" class="form-input" placeholder="Raj Patel" />
+                            <label class="form-label" for="txtName">Your Name <span style="color:#ff2d78">*</span></label>
+                            <input type="text" id="txtName" name="Name" class="form-input" placeholder="Default User" autocomplete="off" />
+                            <div class="enq-err" id="err-name">Name is required and must contain letters only.</div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="txtPhone">Phone Number</label>
-                            <input type="tel" id="txtPhone" name="Phone" class="form-input" placeholder="+91 98765 43210" />
+                            <label class="form-label" for="txtPhone">Phone Number <span style="color:#ff2d78">*</span></label>
+                            <input type="tel" id="txtPhone" name="Phone" class="form-input" placeholder="10-digit number" maxlength="10" autocomplete="off" />
+                            <div class="enq-err" id="err-phone">Enter a valid 10-digit mobile number.</div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="ddlService">Service Needed</label>
+                        <label class="form-label" for="ddlService">Service Needed <span style="color:#ff2d78">*</span></label>
                         <select id="ddlService" name="Service" class="form-select">
                             <option value="">-- Select a Service --</option>
                             <option>Green Line Remove</option>
@@ -120,22 +129,24 @@
                             <option>Software Repair</option>
                             <option>Other</option>
                         </select>
+                        <div class="enq-err" id="err-service">Please select a service.</div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="txtDevice">Device Model</label>
-                        <input type="text" id="txtDevice" name="Device" class="form-input" placeholder="e.g. iPhone 14, Samsung S23..." />
+                        <label class="form-label" for="txtDevice">Device Model <span style="color:#ff2d78">*</span></label>
+                        <input type="text" id="txtDevice" name="Device" class="form-input" placeholder="e.g. iPhone 14, Samsung S23..." autocomplete="off" />
+                        <div class="enq-err" id="err-device">Device model is required.</div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="txtMessage">Message (Optional)</label>
+                        <label class="form-label" for="txtMessage">Message <span style="color:rgba(232,240,255,.4); font-size:11px;">(Optional)</span></label>
                         <textarea id="txtMessage" name="Message" class="form-textarea" placeholder="Describe your issue briefly..."></textarea>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="fileFrontImage">Front Device Photo (Optional)</label>
+                            <label class="form-label" for="fileFrontImage">Front Device Photo <span style="color:rgba(232,240,255,.4); font-size:11px;">(Optional)</span></label>
                             <input type="file" id="fileFrontImage" name="FrontImageFile" class="form-input" accept="image/*" />
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="fileBackImage">Back Device Photo (Optional)</label>
+                            <label class="form-label" for="fileBackImage">Back Device Photo <span style="color:rgba(232,240,255,.4); font-size:11px;">(Optional)</span></label>
                             <input type="file" id="fileBackImage" name="BackImageFile" class="form-input" accept="image/*" />
                         </div>
                     </div>

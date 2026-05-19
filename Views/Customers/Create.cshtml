@@ -6,6 +6,32 @@
     ViewData["PageTitle"] = "Add New Customer";
 }
 
+<style>
+    .field-error {
+        color: #ef4444;
+        font-size: 12px;
+        margin-top: 4px;
+        display: none;
+    }
+    .field-error.show { display: block; }
+    .form-control-admin.input-error {
+        border-color: #ef4444 !important;
+        box-shadow: 0 0 0 2px rgba(239,68,68,0.15);
+    }
+    .form-control-admin.input-ok {
+        border-color: #10b981 !important;
+    }
+    .model-locked {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    .model-hint {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-top: 4px;
+    }
+</style>
+
 <div class="page-header">
     <div>
         <h2>➕ Add New Customer</h2>
@@ -15,74 +41,218 @@
 </div>
 
 <div class="form-card">
-    <div class="form-card-title">📋 Customer & Repair Details</div>
+    <div class="form-card-title">📋 Customer &amp; Repair Details</div>
 
-    <form asp-action="Create" method="post" enctype="multipart/form-data">
+    <form id="createForm" asp-action="Create" method="post" novalidate>
 
         <div class="form-grid">
 
+            <!-- Customer Name -->
             <div class="form-group">
-                <label>Customer Name *</label>
-                <input asp-for="CustomerName" class="form-control-admin" placeholder="Enter full name" />
+                <label>Customer Name <span style="color:#ef4444">*</span></label>
+                <input asp-for="CustomerName" id="customerName" class="form-control-admin"
+                       placeholder="Enter full name (letters only)" autocomplete="off" />
+                <div class="field-error" id="err-name">Name is required and must contain letters only.</div>
+                <span asp-validation-for="CustomerName" class="field-error show"></span>
             </div>
 
+            <!-- Mobile Number -->
             <div class="form-group">
-                <label>Mobile Number</label>
-                <input asp-for="MobileNumber" class="form-control-admin" placeholder="e.g. 9876543210" />
+                <label>Mobile Number <span style="color:#ef4444">*</span></label>
+                <input asp-for="MobileNumber" id="mobileNumber" class="form-control-admin"
+                       placeholder="Enter 10-digit number" maxlength="10" autocomplete="off" />
+                <div class="field-error" id="err-mobile">Please enter a valid 10-digit mobile number.</div>
+                <span asp-validation-for="MobileNumber" class="field-error show"></span>
             </div>
 
+            <!-- Brand -->
             <div class="form-group">
-                <label>Brand</label>
-                <input asp-for="Brand" class="form-control-admin" placeholder="e.g. Samsung, Apple" />
+                <label>Brand <span style="color:#ef4444">*</span></label>
+                <select id="brandSelect" name="Brand" class="form-control-admin">
+                    <option value="">-- Select Brand --</option>
+                    <option value="Apple">Apple</option>
+                    <option value="Samsung">Samsung</option>
+                    <option value="OnePlus">OnePlus</option>
+                    <option value="Xiaomi">Xiaomi</option>
+                    <option value="Redmi">Redmi</option>
+                    <option value="Realme">Realme</option>
+                    <option value="Vivo">Vivo</option>
+                    <option value="Oppo">Oppo</option>
+                    <option value="Motorola">Motorola</option>
+                    <option value="Nokia">Nokia</option>
+                    <option value="Other">Other</option>
+                </select>
+                <div class="field-error" id="err-brand">Please select a brand first.</div>
+                <span asp-validation-for="Brand" class="field-error show"></span>
             </div>
 
+            <!-- Model (locked until brand selected) -->
             <div class="form-group">
-                <label>Model</label>
-                <input asp-for="Model" class="form-control-admin" placeholder="e.g. Galaxy S21" />
+                <label>Model <span style="color:#ef4444">*</span></label>
+                <input asp-for="Model" id="modelInput" class="form-control-admin model-locked"
+                       placeholder="Select brand first..." disabled autocomplete="off" />
+                <div class="model-hint" id="modelHint">⚠️ Please select a brand first to enter model.</div>
+                <div class="field-error" id="err-model">Model is required.</div>
+                <span asp-validation-for="Model" class="field-error show"></span>
             </div>
 
+            <!-- Problem Description -->
             <div class="form-group full-width">
-                <label>Problem Description</label>
-                <input asp-for="Problem" class="form-control-admin" placeholder="Describe the issue..." />
+                <label>Problem Description <span style="color:#ef4444">*</span></label>
+                <input asp-for="Problem" id="problem" class="form-control-admin"
+                       placeholder="Describe the issue clearly..." autocomplete="off" />
+                <div class="field-error" id="err-problem">Problem description is required.</div>
+                <span asp-validation-for="Problem" class="field-error show"></span>
             </div>
 
+            <!-- Device Password -->
             <div class="form-group">
                 <label>Device Password / Pattern</label>
-                <input asp-for="DevicePassword" class="form-control-admin" placeholder="Unlock code" />
+                <input asp-for="DevicePassword" class="form-control-admin" placeholder="Unlock code (optional)" />
             </div>
 
+            <!-- Status -->
             <div class="form-group">
-                <label>Status</label>
-                <select asp-for="Status" class="form-control-admin">
+                <label>Status <span style="color:#ef4444">*</span></label>
+                <select asp-for="Status" id="statusSelect" class="form-control-admin">
                     <option value="">Select Status</option>
                     <option value="Pending">⏳ Pending</option>
                     <option value="Unrepairable">❌ Unrepairable</option>
                     <option value="Completed">✅ Completed</option>
                     <option value="Delivered">📦 Delivered</option>
                 </select>
+                <div class="field-error" id="err-status">Please select a status.</div>
+                <span asp-validation-for="Status" class="field-error show"></span>
             </div>
 
+            <!-- Estimate -->
             <div class="form-group">
                 <label>Estimate (₹)</label>
-                <input asp-for="Estimate" class="form-control-admin" type="number" placeholder="0" />
+                <input asp-for="Estimate" class="form-control-admin" type="number" placeholder="0" min="0" />
             </div>
 
+            <!-- Deposit -->
             <div class="form-group">
                 <label>Deposit (₹)</label>
-                <input asp-for="Deposit" class="form-control-admin" type="number" placeholder="0" />
+                <input asp-for="Deposit" class="form-control-admin" type="number" placeholder="0" min="0" />
             </div>
 
+            <!-- Delivery Date -->
             <div class="form-group">
                 <label>Delivery Date</label>
-                <input type="date" asp-for="CreditTime" class="form-control-admin" />
+                <input type="date" asp-for="CreditTime" min="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control-admin" />
             </div>
 
         </div>
 
         <div class="form-actions">
-            <button type="submit" class="btn-admin btn-primary">💾 Save Customer</button>
+            <button type="button" onclick="validateAndSubmit()" class="btn-admin btn-primary">💾 Save Customer</button>
             <a href="/Customers/Index" class="btn-admin btn-outline">Cancel</a>
         </div>
 
     </form>
 </div>
+
+@section Scripts {
+<script>
+    // ─── BRAND → MODEL LOCK ──────────────────────────────────────
+    const brandSelect = document.getElementById('brandSelect');
+    const modelInput  = document.getElementById('modelInput');
+    const modelHint   = document.getElementById('modelHint');
+
+    brandSelect.addEventListener('change', function () {
+        if (this.value) {
+            modelInput.disabled = false;
+            modelInput.classList.remove('model-locked');
+            modelInput.placeholder = 'Enter model for ' + this.value;
+            modelHint.style.display = 'none';
+        } else {
+            modelInput.disabled = true;
+            modelInput.classList.add('model-locked');
+            modelInput.value = '';
+            modelInput.placeholder = 'Select brand first...';
+            modelHint.style.display = 'block';
+        }
+    });
+
+    // ─── LIVE VALIDATION HELPERS ─────────────────────────────────
+    function setError(fieldId, errId, show) {
+        const field = document.getElementById(fieldId);
+        const err   = document.getElementById(errId);
+        if (show) {
+            field && field.classList.add('input-error');
+            field && field.classList.remove('input-ok');
+            err  && err.classList.add('show');
+        } else {
+            field && field.classList.remove('input-error');
+            field && field.classList.add('input-ok');
+            err  && err.classList.remove('show');
+        }
+        return !show; // true = valid
+    }
+
+    function validateName() {
+        const val = document.getElementById('customerName').value.trim();
+        return setError('customerName', 'err-name', !val || !/^[a-zA-Z\s]+$/.test(val));
+    }
+
+    function validateMobile() {
+        const val = document.getElementById('mobileNumber').value.trim();
+        return setError('mobileNumber', 'err-mobile', !/^\d{10}$/.test(val));
+    }
+
+    function validateBrand() {
+        const val = brandSelect.value;
+        return setError('brandSelect', 'err-brand', !val);
+    }
+
+    function validateModel() {
+        const val = modelInput.value.trim();
+        return setError('modelInput', 'err-model', !val);
+    }
+
+    function validateProblem() {
+        const val = document.getElementById('problem').value.trim();
+        return setError('problem', 'err-problem', !val);
+    }
+
+    function validateStatus() {
+        const val = document.getElementById('statusSelect').value;
+        return setError('statusSelect', 'err-status', !val);
+    }
+
+    // ─── LIVE LISTENERS ──────────────────────────────────────────
+    document.getElementById('customerName').addEventListener('input', validateName);
+    document.getElementById('mobileNumber').addEventListener('input', function () {
+        // Allow digits only while typing
+        this.value = this.value.replace(/\D/g, '').slice(0, 10);
+        validateMobile();
+    });
+    brandSelect.addEventListener('change', validateBrand);
+    modelInput.addEventListener('input', validateModel);
+    document.getElementById('problem').addEventListener('input', validateProblem);
+    document.getElementById('statusSelect').addEventListener('change', validateStatus);
+
+    // ─── SUBMIT VALIDATION ────────────────────────────────────────
+    function validateAndSubmit() {
+        const ok = [
+            validateName(),
+            validateMobile(),
+            validateBrand(),
+            validateModel(),
+            validateProblem(),
+            validateStatus()
+        ].every(Boolean);
+
+        if (ok) {
+            // Enable model input before submit so value is posted
+            modelInput.disabled = false;
+            document.getElementById('createForm').submit();
+        } else {
+            // Scroll to first error
+            const firstErr = document.querySelector('.input-error');
+            if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+</script>
+}

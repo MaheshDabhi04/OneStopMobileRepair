@@ -104,29 +104,57 @@ function toggleFAQ(btn) {
     }
 }
 
-// ── CONTACT FORM SUCCESS (Contact page) ──────────────────────
+// ── ENQUIRY FORM VALIDATION + SUBMIT ─────────────────────────
+function _enqErr(fieldId, errId, hasError) {
+    var field = document.getElementById(fieldId);
+    var err   = document.getElementById(errId);
+    if (field) {
+        field.classList.toggle('inp-err', hasError);
+        field.classList.toggle('inp-ok',  !hasError);
+    }
+    if (err) err.classList.toggle('show', hasError);
+    return !hasError;
+}
+
 function handleSubmit() {
-    const formData = new FormData();
-    formData.append("Name", $("#txtName").val());
-    formData.append("Phone", $("#txtPhone").val());
-    formData.append("Service", $("#ddlService").val());
-    formData.append("Device", $("#txtDevice").val());
-    formData.append("Message", $("#txtMessage").val());
+    var name    = (document.getElementById('txtName')   || {}).value || '';
+    var phone   = (document.getElementById('txtPhone')  || {}).value || '';
+    var service = (document.getElementById('ddlService')|| {}).value || '';
+    var device  = (document.getElementById('txtDevice') || {}).value || '';
 
-    const frontInput = document.getElementById('fileFrontImage');
-    if (frontInput && frontInput.files.length > 0) {
-        formData.append("FrontImageFile", frontInput.files[0]);
-    }
+    var nameOk    = _enqErr('txtName',    'err-name',    !name.trim()   || !/^[a-zA-Z\s]+$/.test(name.trim()));
+    var phoneOk   = _enqErr('txtPhone',   'err-phone',   !/^\d{10}$/.test(phone.trim()));
+    var serviceOk = _enqErr('ddlService', 'err-service', !service);
+    var deviceOk  = _enqErr('txtDevice',  'err-device',  !device.trim());
 
-    const backInput = document.getElementById('fileBackImage');
-    if (backInput && backInput.files.length > 0) {
-        formData.append("BackImageFile", backInput.files[0]);
-    }
-
-    if (!formData.get("Name") || !formData.get("Phone")) {
-        alert("Please enter both Name and Phone number.");
+    if (!nameOk || !phoneOk || !serviceOk || !deviceOk) {
+        // Scroll to first error
+        var first = document.querySelector('.inp-err');
+        if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
     }
+
+    // ── Build FormData and POST ───────────────────────────────
+    var formData = new FormData();
+    formData.append("Name",    name.trim());
+    formData.append("Phone",   phone.trim());
+    formData.append("Service", service);
+    formData.append("Device",  device.trim());
+
+    var msg = document.getElementById('txtMessage');
+    if (msg) formData.append("Message", msg.value);
+
+    var frontInput = document.getElementById('fileFrontImage');
+    if (frontInput && frontInput.files.length > 0)
+        formData.append("FrontImageFile", frontInput.files[0]);
+
+    var backInput = document.getElementById('fileBackImage');
+    if (backInput && backInput.files.length > 0)
+        formData.append("BackImageFile", backInput.files[0]);
+
+    // Disable button to prevent double-submit
+    var btn = document.querySelector('.submit-btn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
 
     $.ajax({
         url: "/Website/Contact",
@@ -140,10 +168,25 @@ function handleSubmit() {
                 document.getElementById('formSuccess').style.display = 'block';
             } else {
                 alert("Error: " + (res.message || "Something went wrong"));
+                if (btn) { btn.disabled = false; btn.textContent = 'SEND ENQUIRY →'; }
             }
         },
         error: function () {
             alert("An error occurred. Please try again.");
+            if (btn) { btn.disabled = false; btn.textContent = 'SEND ENQUIRY →'; }
         }
     });
 }
+
+// ── Live listeners for enquiry form ──────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+    var txtName = document.getElementById('txtName');
+    var txtPhone = document.getElementById('txtPhone');
+    var ddlService = document.getElementById('ddlService');
+    var txtDevice = document.getElementById('txtDevice');
+
+    if (txtName)    txtName.addEventListener('input', function() { _enqErr('txtName','err-name', !this.value.trim() || !/^[a-zA-Z\s]+$/.test(this.value.trim())); });
+    if (txtPhone)   txtPhone.addEventListener('input', function() { this.value = this.value.replace(/\D/g,'').slice(0,10); _enqErr('txtPhone','err-phone', !/^\d{10}$/.test(this.value)); });
+    if (ddlService) ddlService.addEventListener('change', function() { _enqErr('ddlService','err-service', !this.value); });
+    if (txtDevice)  txtDevice.addEventListener('input', function() { _enqErr('txtDevice','err-device', !this.value.trim()); });
+});

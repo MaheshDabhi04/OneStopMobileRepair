@@ -1,0 +1,43 @@
+@model OneStopMobileRepair.Models.Expense
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Delete Expense";
+    ViewData["PageTitle"] = "Delete Expense";
+}
+
+<div class="page-header">
+    <div>
+        <h2>🗑 Delete Expense</h2>
+        <p>This action cannot be undone</p>
+    </div>
+    <a href="/Expenses/Index" class="btn-admin btn-outline">← Back to Expenses</a>
+</div>
+
+<div class="delete-card">
+    <div class="delete-icon">💸</div>
+
+    <h3>Delete This Expense?</h3>
+    <p>You are about to permanently delete the following expense record:</p>
+
+    <div class="delete-name">@Model.ProductName</div>
+
+    <p style="font-size:16px; font-weight:800; color:var(--danger); margin-bottom:4px;">
+        ₹@Model.Amount
+    </p>
+    <p style="font-size:13px; color:#64748b;">
+        📅 @Model.ExpenseDate.ToString("dd MMM yyyy")
+    </p>
+    <p style="font-size:13px; color:#64748b; margin-top:10px;">
+        ⚠️ This will permanently remove this record from your expense logs.
+    </p>
+
+    <div class="delete-actions" style="margin-top:24px;">
+        <form asp-action="Delete">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn-admin btn-danger-full">🗑 Yes, Delete Permanently</button>
+        </form>
+        <a href="/Expenses/Index" class="btn-admin btn-outline">Cancel</a>
+    </div>
+</div>

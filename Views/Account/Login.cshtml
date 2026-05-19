@@ -29,11 +29,11 @@
 
         <button type="submit" class="btn-login">🚀 Sign In to Dashboard</button>
 
-        @if (ViewBag.Error != null)
+        @if (ViewBag.Error != null || TempData["Error"] != null)
         {
             <div class="login-error">
                 <span>⚠️</span>
-                <span>@ViewBag.Error</span>
+                <span>@(ViewBag.Error ?? TempData["Error"])</span>
             </div>
         }
     </form>

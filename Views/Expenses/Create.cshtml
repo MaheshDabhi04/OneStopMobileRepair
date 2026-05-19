@@ -1,0 +1,62 @@
+@model OneStopMobileRepair.Models.Expense
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Add Expense";
+    ViewData["PageTitle"] = "Add New Expense";
+}
+
+<div class="page-header">
+    <div>
+        <h2>➕ Add New Expense</h2>
+        <p>Record a product purchase or operational expense</p>
+    </div>
+    <a href="/Expenses/Index" class="btn-admin btn-outline">← Back to Expenses</a>
+</div>
+
+<div class="form-card">
+    <div class="form-card-title">📋 Expense Details</div>
+
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        
+        <div class="form-grid">
+            <!-- Product Name -->
+            <div class="form-group full-width">
+                <label>Product Name / Description <span style="color:#ef4444">*</span></label>
+                <input asp-for="ProductName" class="form-control-admin" placeholder="What was purchased?" autocomplete="off" />
+                <span asp-validation-for="ProductName" style="color:#ef4444; font-size:12px;"></span>
+            </div>
+
+            <!-- Amount -->
+            <div class="form-group">
+                <label>Amount (₹) <span style="color:#ef4444">*</span></label>
+                <input asp-for="Amount" class="form-control-admin" type="number" step="0.01" placeholder="0.00" />
+                <span asp-validation-for="Amount" style="color:#ef4444; font-size:12px;"></span>
+            </div>
+
+            <!-- Expense Date -->
+            <div class="form-group">
+                <label>Expense Date <span style="color:#ef4444">*</span></label>
+                <input asp-for="ExpenseDate" type="date" class="form-control-admin" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="ExpenseDate" style="color:#ef4444; font-size:12px;"></span>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group full-width">
+                <label>Additional Notes</label>
+                <textarea asp-for="Description" class="form-control-admin" rows="3" placeholder="Any extra details..."></textarea>
+                <span asp-validation-for="Description" style="color:#ef4444; font-size:12px;"></span>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-admin btn-primary">💾 Save Expense</button>
+            <a href="/Expenses/Index" class="btn-admin btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

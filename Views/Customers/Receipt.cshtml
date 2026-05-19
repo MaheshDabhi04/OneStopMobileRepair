@@ -1,0 +1,506 @@
+@model OneStopMobileRepair.Models.Customer
+
+@{
+    Layout = null; // Standalone page — no admin chrome
+    ViewData["Title"] = "Job Receipt #" + Model.Id;
+    string jobNo = "JOB" + Model.Id.ToString("D4");
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Receipt – @jobNo | OneStop Mobile Repairing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== SCREEN STYLES ===== */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            color: #1e293b;
+        }
+
+        /* Top action bar (hidden on print) */
+        .action-bar {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            margin-bottom: 32px;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .btn-back {
+            background: rgba(255,255,255,0.08);
+            color: #cbd5e1;
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-back:hover { background: rgba(255,255,255,0.14); color: #e2e8f0; }
+
+        .btn-print {
+            flex: 1;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(99,102,241,0.45);
+            transition: all 0.2s;
+            letter-spacing: 0.3px;
+        }
+        .btn-print:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(99,102,241,0.6);
+        }
+        .btn-print:active { transform: translateY(0); }
+
+        /* ===== RECEIPT PAPER ===== */
+        .receipt-wrap {
+            width: 100%;
+            max-width: 420px;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Zigzag top edge */
+        .receipt-wrap::before {
+            content: '';
+            display: block;
+            height: 16px;
+            background:
+                radial-gradient(circle at 8px 100%, transparent 8px, #fff 8px) 0 0 / 16px 16px,
+                radial-gradient(circle at -8px 100%, transparent 8px, #fff 8px) 8px 0 / 16px 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Zigzag bottom edge */
+        .receipt-wrap::after {
+            content: '';
+            display: block;
+            height: 16px;
+            background:
+                radial-gradient(circle at 8px 0%, transparent 8px, #fff 8px) 0 0 / 16px 16px,
+                radial-gradient(circle at -8px 0%, transparent 8px, #fff 8px) 8px 0 / 16px 16px;
+        }
+
+        .receipt-inner {
+            padding: 8px 28px 24px;
+            font-family: 'Courier Prime', monospace;
+        }
+
+        /* Shop Header */
+        .shop-header {
+            text-align: center;
+            padding-bottom: 18px;
+            border-bottom: 2px dashed #cbd5e1;
+            margin-bottom: 16px;
+        }
+
+        .shop-logo-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 6px;
+        }
+
+        .shop-name {
+            font-family: 'Inter', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #1e293b;
+            text-transform: uppercase;
+        }
+
+        .shop-tagline {
+            font-family: 'Inter', sans-serif;
+            font-size: 10.5px;
+            color: #64748b;
+            letter-spacing: 0.4px;
+            margin-top: 1px;
+        }
+
+        .shop-address {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            color: #475569;
+            margin-top: 8px;
+            line-height: 1.65;
+        }
+
+        .shop-phone {
+            font-family: 'Inter', sans-serif;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 4px;
+        }
+
+        /* JOBSHEET Title */
+        .jobsheet-title {
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 17px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #1e293b;
+            margin: 18px 0 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #cbd5e1;
+        }
+
+        /* Job meta row */
+        .job-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 12.5px;
+            color: #475569;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px dashed #cbd5e1;
+        }
+        .job-meta .job-num {
+            font-weight: 800;
+            font-size: 14px;
+            color: #1e293b;
+        }
+        .job-meta .job-date {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        /* Field rows */
+        .field-row {
+            display: flex;
+            gap: 6px;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 5px;
+            color: #1e293b;
+        }
+        .field-label {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            white-space: nowrap;
+            min-width: 136px;
+            color: #475569;
+        }
+        .field-colon { color: #94a3b8; }
+        .field-value {
+            font-family: 'Courier Prime', monospace;
+            font-weight: 700;
+            color: #0f172a;
+            word-break: break-word;
+        }
+
+        /* Divider */
+        .receipt-divider {
+            border: none;
+            border-top: 1px dashed #cbd5e1;
+            margin: 14px 0;
+        }
+
+        /* Amount */
+        .amount-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-top: 2px dashed #cbd5e1;
+            border-bottom: 2px dashed #cbd5e1;
+            margin: 14px 0;
+        }
+        .amount-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #475569;
+        }
+        .amount-value {
+            font-family: 'Inter', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        /* Deposit row */
+        .deposit-row {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Inter', sans-serif;
+            font-size: 12.5px;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+        .deposit-row .dep-val { font-weight: 700; color: #1e293b; }
+
+        /* Balance due */
+        .balance-row {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Inter', sans-serif;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #dc2626;
+            padding-top: 6px;
+            border-top: 1px solid #fca5a5;
+            margin-top: 6px;
+        }
+
+        /* Terms */
+        .terms-section {
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px dashed #cbd5e1;
+        }
+        .terms-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+        .terms-list {
+            list-style: none;
+            padding: 0;
+        }
+        .terms-list li {
+            font-family: 'Courier Prime', monospace;
+            font-size: 10.5px;
+            color: #475569;
+            line-height: 1.6;
+            padding-left: 10px;
+            position: relative;
+            margin-bottom: 2px;
+        }
+        .terms-list li::before {
+            content: '–';
+            position: absolute;
+            left: 0;
+            color: #94a3b8;
+        }
+
+        /* Footer thank you */
+        .receipt-footer {
+            text-align: center;
+            margin-top: 22px;
+            padding-top: 16px;
+            border-top: 1px dashed #cbd5e1;
+        }
+        .receipt-footer .thank-you {
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            color: #1e293b;
+        }
+        .receipt-footer .shop-sign {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            margin-top: 3px;
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @@media print {
+            body {
+                background: #fff !important;
+                padding: 0 !important;
+                min-height: unset !important;
+                display: block !important;
+            }
+            .action-bar { display: none !important; }
+            .receipt-wrap {
+                box-shadow: none !important;
+                max-width: 100% !important;
+                width: 80mm !important;
+                border-radius: 0 !important;
+                margin: 0 auto;
+            }
+            .receipt-wrap::before,
+            .receipt-wrap::after { display: none !important; }
+            .receipt-inner { padding: 4px 12px 12px !important; }
+            @@page {
+                size: 80mm auto;
+                margin: 4mm;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Action Bar (screen only) -->
+    <div class="action-bar">
+        <a href="/Customers/Details/@Model.Id" class="btn-back">← Back</a>
+        <button class="btn-print" onclick="window.print()">
+            🖨️ Print / Download Receipt
+        </button>
+    </div>
+
+    <!-- Receipt Paper -->
+    <div class="receipt-wrap">
+        <div class="receipt-inner">
+
+            <!-- Shop Header -->
+            <div class="shop-header">
+                <img src="/images/logo.png" alt="OneStop Logo" class="shop-logo-img" />
+                <div class="shop-name">OneStop Mobile Repairing</div>
+                <div class="shop-tagline">Mobile Repair &middot; Morbi</div>
+                <div class="shop-address">
+                    Om Shanti Complex, 1st Floor, Bapasitaram Chowk,<br />
+                    Ravapar Road, Below CellularWorld,<br />
+                    Morbi, Gujarat – 363641
+                </div>
+                <div class="shop-phone">+91 90337 78500</div>
+            </div>
+
+            <!-- Jobsheet Title -->
+            <div class="jobsheet-title">JOBSHEET</div>
+
+            <!-- Job Meta -->
+            <div class="job-meta">
+                <span class="job-num">#@jobNo</span>
+                <span class="job-date">Date: @Model.EntryDate.ToString("dd-MM-yyyy")</span>
+            </div>
+
+            <!-- Customer & Device Fields -->
+            <div class="field-row">
+                <span class="field-label">Name</span>
+                <span class="field-colon">:</span>
+                <span class="field-value">@Model.CustomerName</span>
+            </div>
+            <div class="field-row">
+                <span class="field-label">Mobile</span>
+                <span class="field-colon">:</span>
+                <span class="field-value">@Model.MobileNumber</span>
+            </div>
+            <div class="field-row">
+                <span class="field-label">Brand</span>
+                <span class="field-colon">:</span>
+                <span class="field-value">@Model.Brand</span>
+            </div>
+            <div class="field-row">
+                <span class="field-label">Model</span>
+                <span class="field-colon">:</span>
+                <span class="field-value">@Model.Model</span>
+            </div>
+            <div class="field-row">
+                <span class="field-label">Problem</span>
+                <span class="field-colon">:</span>
+                <span class="field-value">@(Model.Problem ?? "—")</span>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.DevicePassword))
+            {
+                <div class="field-row">
+                    <span class="field-label">Device Password</span>
+                    <span class="field-colon">:</span>
+                    <span class="field-value">@Model.DevicePassword</span>
+                </div>
+            }
+
+            <div class="field-row">
+                <span class="field-label">Status</span>
+                <span class="field-colon">:</span>
+                <span class="field-value">@Model.Status</span>
+            </div>
+
+            @if (Model.CreditTime.HasValue)
+            {
+                <div class="field-row">
+                    <span class="field-label">Delivery Date</span>
+                    <span class="field-colon">:</span>
+                    <span class="field-value">@Model.CreditTime.Value.ToString("dd-MM-yyyy")</span>
+                </div>
+            }
+
+            <!-- Amount Section -->
+            <div class="amount-section">
+                <span class="amount-label">Rs.</span>
+                <span class="amount-value">₹@Model.Estimate</span>
+            </div>
+
+            <!-- Deposit & Balance -->
+            <div class="deposit-row">
+                <span>Deposit Paid</span>
+                <span class="dep-val">₹@Model.Deposit</span>
+            </div>
+            @{
+                int balance = Model.Estimate - Model.Deposit;
+            }
+            @if (balance > 0)
+            {
+                <div class="balance-row">
+                    <span>Balance Due</span>
+                    <span>₹@balance</span>
+                </div>
+            }
+            else
+            {
+                <div class="balance-row" style="color:#16a34a; border-top-color:#86efac;">
+                    <span>Balance Due</span>
+                    <span>₹0 (Paid)</span>
+                </div>
+            }
+
+            <!-- Terms & Conditions -->
+            <div class="terms-section">
+                <div class="terms-title">Terms &amp; Conditions</div>
+                <ul class="terms-list">
+                    <li>મોબાઇલ લેવા આવો ત્યારે જોબસિટ સાથે લાવવી ફરજિયાત છે.</li>
+                    <li>રીપેરીંગ દરમિયાન મોબાઇલ માં કોઈ પણ નુકસાન થાય તો તેની જવાબદારી ગ્રાહક ની રહેશે.</li>
+                    <li><b>મોબાઇલ લેવા આવો ત્યારે ચેક કરીને લઈ જવાનો રહેશે, ત્યાર બાદ અમારી કોઈ જવાબદારી રહેશે નહિ.</b></li>
+                    <li>મોબાઇલ રીપેરીંગ થયા પછી 10 દિવસ ની અંદર લઈ જવાનો રહેશે.</li>
+                    <li>રીપેરીંગ મા લાગતો સમય અંદાજિત આપવામાં આવે છે.</li>
+                    <li>મોબાઇલ રીપેરીંગ કરતા જો બંધ થઈ જાય તો અમારી જવાબદારી રહેશે નહી.</li>
+                    <li>રીપેરીંગ કરેલ પાર્ટ્સ પાછા આપવામાં આવશે નહી.</li>
+                    <li><b>કોઈ પણ સંજોગોમાં પેમેન્ટ પાછુ આપવામાં આવશે નહી.</b></li>
+                </ul>
+                <div style="font-family:'Inter',sans-serif;font-size:10px;color:#94a3b8;margin-top:10px;font-style:italic;">Agree terms &amp; conditions</div>
+            </div>
+
+            <!-- Footer -->
+            <div class="receipt-footer">
+                <div class="thank-you">Thank you.</div>
+                <div class="shop-sign">OneStop Mobile Repairing</div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

@@ -16,7 +16,7 @@ namespace OneStopMobileRepair.Controllers
             _context = context;
         }
 
-        // LIST
+        // LIST   
         public IActionResult Index(string status, string filter)
         {
             var customers = _context.Customers.AsQueryable();
@@ -53,6 +53,11 @@ namespace OneStopMobileRepair.Controllers
         [HttpPost]
         public IActionResult Create(Customer customer)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(customer);
+            }
+
             _context.Customers.Add(customer);
             _context.SaveChanges();
 
@@ -109,6 +114,19 @@ namespace OneStopMobileRepair.Controllers
 
         // DETAILS
         public IActionResult Details(int id)
+        {
+            var customer = _context.Customers.Find(id);
+
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            return View(customer);
+        }
+
+        // RECEIPT
+        public IActionResult Receipt(int id)
         {
             var customer = _context.Customers.Find(id);
 

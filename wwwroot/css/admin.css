@@ -41,6 +41,7 @@
     --c-delivered: #3b82f6;
     --c-today: #8b5cf6;
     --c-overdue: #ec4899;
+    --c-unrepairable: #64748b;
     --sidebar-w: 260px;
     --header-h: 68px;
     --radius: 14px;
@@ -159,13 +160,14 @@
 }
 
 .sidebar-brand {
-    padding: 16px 20px; /* Adjusted padding */
+    padding: 20px 24px;
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     text-decoration: none;
     position: relative;
+    transition: var(--transition);
 }
 
 /* ── LOGO / BRAND ─────────────────────────────────────────── */
@@ -178,7 +180,7 @@
     text-decoration: none !important;
     display: flex !important;
     align-items: center !important;
-    gap: 12px !important;
+    gap: 14px !important;
     position: relative;
 }
 
@@ -229,7 +231,8 @@
 .os-brand-text {
     display: flex;
     flex-direction: column;
-    line-height: 1.15;
+    justify-content: center;
+    line-height: 1.2;
 }
 
     .os-brand-text .brand-main {
@@ -792,6 +795,10 @@
     background: linear-gradient(90deg, var(--c-overdue), transparent);
 }
 
+.kpi-unrepairable .kpi-glow {
+    background: linear-gradient(90deg, var(--c-unrepairable), transparent);
+}
+
 .kpi-card:hover .kpi-glow {
     background-size: 200% 200%;
     animation: kpiGlowPulse 1.5s ease infinite;
@@ -843,6 +850,11 @@
 .kpi-icon-repairing {
     background: rgba(239, 68, 68, 0.15);
     color: var(--c-repairing);
+}
+
+.kpi-icon-unrepairable {
+    background: rgba(100, 116, 139, 0.15);
+    color: var(--c-unrepairable);
 }
 
 .kpi-icon-completed {
@@ -1778,8 +1790,14 @@
 
 .badge-delivered {
     background: var(--info-light);
-    color: #60a5fa;
-    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: var(--info);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.badge-unrepairable {
+    background: rgba(100, 116, 139, 0.12); /* Based on --c-unrepairable slate var */
+    color: var(--c-unrepairable);
+    border-color: rgba(100, 116, 139, 0.2);
 }
 
 /* ================================================================

@@ -1,0 +1,263 @@
+@model OneStopMobileRepair.Models.AdminProfileViewModel
+@{
+    ViewData["Title"] = "My Profile";
+    ViewData["PageTitle"] = "My Profile";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    bool hasPicture = !string.IsNullOrEmpty(Model.ExistingProfilePictureUrl);
+}
+
+<style>
+    /* ── Profile Avatar ──────────────────────────────────── */
+    .profile-avatar-wrap {
+        position: relative;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        padding: 4px;
+        background: linear-gradient(135deg, var(--accent), var(--purple));
+        box-shadow: var(--glow);
+        margin: 0 auto 24px;
+    }
+
+    .profile-avatar-inner {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: var(--bg-card);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-avatar-inner img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .profile-avatar-inner .initial {
+        font-size: 56px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #fff 40%, #a5b4fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Camera overlay — always visible on hover */
+    .avatar-overlay {
+        position: absolute;
+        inset: 4px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.55);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        opacity: 0;
+        transition: opacity 0.25s ease;
+        cursor: pointer;
+    }
+
+    .profile-avatar-wrap:hover .avatar-overlay {
+        opacity: 1;
+    }
+
+    .avatar-overlay svg {
+        width: 28px;
+        height: 28px;
+        color: #fff;
+    }
+
+    .avatar-overlay span {
+        font-size: 11px;
+        color: #fff;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    /* Remove button below avatar */
+    .btn-remove-pic {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--danger);
+        background: var(--danger-light);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+        border-radius: 20px;
+        padding: 6px 14px;
+        cursor: pointer;
+        transition: var(--transition);
+        text-decoration: none;
+        margin-top: 8px;
+    }
+
+    .btn-remove-pic:hover {
+        background: rgba(239, 68, 68, 0.25);
+        border-color: var(--danger);
+        color: var(--danger);
+    }
+
+    /* Section divider */
+    .section-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin: 28px 0 18px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-title::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    /* Hidden file input trick */
+    .file-trigger {
+        position: absolute;
+        inset: 4px;
+        border-radius: 50%;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 10;
+    }
+</style>
+
+<div class="page-header">
+    <div>
+        <h2>👤 My Profile</h2>
+        <p>Click on your avatar to change your profile picture.</p>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); padding: 16px 20px; border-radius: var(--radius); margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #10b981; font-weight: 500;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;flex-shrink:0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="form-card" style="max-width: 680px;">
+    <div class="form-card-title">⚙️ Account Settings</div>
+
+    <form id="profileForm" asp-action="Profile" method="post" enctype="multipart/form-data">
+
+        <div asp-validation-summary="ModelOnly" style="color:#ef4444;font-size:14px;margin-bottom:20px;padding:12px;background:rgba(239,68,68,0.1);border-radius:8px;display:none"></div>
+
+        @* Hidden flags *@
+        <input type="hidden" asp-for="RemovePicture" id="removePictureFlag" value="false" />
+
+        <div style="text-align:center;">
+            <div class="profile-avatar-wrap">
+                <div class="profile-avatar-inner" id="avatarPreview">
+                    @if (hasPicture)
+                    {
+                        <img id="avatarImg" src="@Model.ExistingProfilePictureUrl" alt="Profile Picture" />
+                    }
+                    else
+                    {
+                        <div class="initial" id="avatarInitial">@(string.IsNullOrEmpty(Model.FullName) ? "A" : Model.FullName.Substring(0, 1).ToUpper())</div>
+                    }
+                </div>
+
+                <!-- Invisible file input sits over the avatar -->
+                <input class="file-trigger" asp-for="ProfilePicture" type="file" accept="image/*" id="picInput" title="Click to change photo" />
+
+                <!-- Camera overlay shown on hover -->
+                <div class="avatar-overlay" style="pointer-events:none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    <span>Change Photo</span>
+                </div>
+            </div>
+
+            @if (hasPicture)
+            {
+                <button type="button" class="btn-remove-pic" id="removePicBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                    Remove Picture
+                </button>
+            }
+        </div>
+
+        <div class="section-title">Personal Details</div>
+
+        <div class="form-group">
+            <label>Full Name <span style="color:#ef4444">*</span></label>
+            <input asp-for="FullName" class="form-control-admin" placeholder="Enter your full name" />
+            <span asp-validation-for="FullName" style="color:#ef4444;font-size:12px;margin-top:4px;display:block;"></span>
+        </div>
+
+        <div class="section-title">Security</div>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:18px;margin-top:-10px;">Leave password fields blank if you do not wish to change your current password.</p>
+
+        <div class="form-group">
+            <label>Current Password</label>
+            <input asp-for="CurrentPassword" type="password" class="form-control-admin" placeholder="Enter current password to authorize changes" />
+            <span asp-validation-for="CurrentPassword" style="color:#ef4444;font-size:12px;margin-top:4px;display:block;"></span>
+        </div>
+
+        <div class="form-group">
+            <label>New Password</label>
+            <input asp-for="NewPassword" type="password" class="form-control-admin" placeholder="Enter new password" />
+            <span asp-validation-for="NewPassword" style="color:#ef4444;font-size:12px;margin-top:4px;display:block;"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Confirm New Password</label>
+            <input asp-for="ConfirmPassword" type="password" class="form-control-admin" placeholder="Re-enter new password" />
+            <span asp-validation-for="ConfirmPassword" style="color:#ef4444;font-size:12px;margin-top:4px;display:block;"></span>
+        </div>
+
+        <div class="form-actions" style="margin-top:30px;">
+            <button type="submit" class="btn-admin btn-primary">💾 Save Profile</button>
+            <a href="/Home/Index" class="btn-admin btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Live avatar preview when a new file is selected
+        const picInput = document.getElementById('picInput');
+        const removePicBtn = document.getElementById('removePicBtn');
+        const removeFlag = document.getElementById('removePictureFlag');
+        const avatarPreview = document.getElementById('avatarPreview');
+
+        picInput?.addEventListener('change', function () {
+            const file = this.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                avatarPreview.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="Preview" />`;
+            };
+            reader.readAsDataURL(file);
+            // Reset remove flag if user picks a new picture
+            if (removeFlag) removeFlag.value = 'false';
+        });
+
+        removePicBtn?.addEventListener('click', function () {
+            // Show initial placeholder
+            const fullNameInput = document.querySelector('input[name="FullName"]');
+            const initial = fullNameInput?.value?.trim()?.[0]?.toUpperCase() || 'A';
+            avatarPreview.innerHTML = `<div style="font-size:56px;font-weight:800;background:linear-gradient(135deg,#fff 40%,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${initial}</div>`;
+            // Mark for removal on submit
+            if (removeFlag) removeFlag.value = 'true';
+            // Clear file input
+            picInput.value = '';
+            // Hide remove button
+            this.style.display = 'none';
+        });
+    </script>
+}

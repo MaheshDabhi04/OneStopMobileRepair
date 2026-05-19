@@ -31,6 +31,16 @@ namespace OneStopMobileRepair.Controllers
             ViewBag.Overdue = _context.Customers
                 .Count(x => x.CreditTime < today && x.Status != "Delivered" && x.Status != "Completed");
 
+            // Expense Summary
+            var startOfMonth = new DateTime(today.Year, today.Month, 1);
+            ViewBag.DailyExpense = _context.Expenses
+                .Where(e => e.ExpenseDate.Date == today)
+                .Sum(e => (decimal?)e.Amount) ?? 0;
+
+            ViewBag.MonthlyExpense = _context.Expenses
+                .Where(e => e.ExpenseDate >= startOfMonth)
+                .Sum(e => (decimal?)e.Amount) ?? 0;
+
             return View();
         }
     }
